@@ -6,9 +6,9 @@ highlighter:      pygments
 permalink:        pretty
 
 # Setup
-title:            MA's blog
+title:            MA
 tagline:          'A Jekyll theme'
-description:      'Hi'
+description:      'Hi!'
 url:              http://hyde.getpoole.com
 baseurl:          /
 
