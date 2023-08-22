@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Test
+title: Paper Review
 ---
 
 {% for post in site.posts %}
