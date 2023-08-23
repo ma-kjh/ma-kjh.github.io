@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Paper Review
+title: Coding
 ---
 
 {% for post in site.posts %}
