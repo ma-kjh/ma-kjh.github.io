@@ -4,7 +4,7 @@ title: About
 ---
 
 <p class="message">
-  Hi! I am a Ph.d/Master integrated student at Daintlab @ Seoultech, advised by Prof. Sang heum Hwang. I recived B.S. in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoultech.
+  Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. Sang heum Hwang. I recived B.S. in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoultech.
 </p>
 
 
