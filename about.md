@@ -4,7 +4,7 @@ title: About
 ---
 
 <p class="message">
-  Hi! This blog posts paper review!
+  Hi! I am a Ph.d/Master integrated student at Daintlab @ Seoultech, advised by Prof. Sang heum Hwang. I recived B.S. in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoultech.
 </p>
 
 
