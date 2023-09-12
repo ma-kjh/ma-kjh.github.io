@@ -3,7 +3,7 @@ layout: post
 title: Curriculum-Vitae
 ---
 
-Hi
+Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. Sangheum Hwang. I received B.S. in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoultech.
 
 ### Education
 
