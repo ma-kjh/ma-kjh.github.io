@@ -7,8 +7,11 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 ### Education
 
-- Seoultech, Seoul, Rep. of Korea : 2023.02 ~ 
-- Seoultech, Seoul, Rep. of Korea : 2016.02 ~ 2022.02
+- Ph.d
+  - Seoul National University of Science and Technology, Seoul, South Korea : 2023.03 ~
+- Bachelor of Science
+  - Seoul National University of Science and Technology, Seoul, South Korea : 2016.03 ~ 2022.02
+
 
 ### Publication
 
