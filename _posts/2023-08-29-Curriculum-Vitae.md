@@ -7,12 +7,12 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 ### Education
 
-- Seoul National University of Science and Technology, Seoul, Rep. of Korea : 2023.02 ~ 
-- Seoul National University of Science and Technology, Seoul, Rep. of Korea : 2016.02 ~ 2022.02
+- Seoultech, Seoul, Rep. of Korea : 2023.02 ~ 
+- Seoultech, Seoul, Rep. of Korea : 2016.02 ~ 2022.02
 
 ### Publication
 
 ### Teaching
 
-- Seoul National University of Science and Technology
+- Seoultech
   - 146048/41001 : Artificial Intelligence (Fall 2023) - TA
