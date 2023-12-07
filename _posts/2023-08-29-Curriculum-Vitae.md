@@ -24,11 +24,11 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 ### Publication
 
-- Jeongho Kim, Taejune Kim, **Jeonghyeon Kim**, Simon S. Woo, ``Evading Deepfake Detectors via High Quality Face Pre-Processing Methods'', _IEEE International Conference on Pattern Recognition (ICPR), August 2022 (Oral)_
+- Jeongho Kim, Taejune Kim, **Jeonghyeon Kim**, Simon S. Woo, "Evading Deepfake Detectors via High Quality Face Pre-Processing Methods", _IEEE International Conference on Pattern Recognition (ICPR), August 2022 (Oral)_
 
-- Jihyo Kim, **Jeonghyeon Kim**, Sangheum Hwang, ``Deep Active Learning with Contrastive Learning Under Realistic Data Pool Assumptions'', _AAAI 2023 Workshop on Practical Deep Learning in the Wild_
+- Jihyo Kim, **Jeonghyeon Kim**, Sangheum Hwang, "Deep Active Learning with Contrastive Learning Under Realistic Data Pool Assumptions", _AAAI 2023 Workshop on Practical Deep Learning in the Wild_
 
-- **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, ``Enhancing Out-of-Distribution Detection Performance of CLIP Based on Fine-tuning with Random Texts'', _Korea Computer Congress 2023 (Oral)_
+- **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, "Enhancing Out-of-Distribution Detection Performance of CLIP Based on Fine-tuning with Random Texts", _Korea Computer Congress 2023 (Oral)_
 
 ### Skills and Certificate
 - Languages & Software : Python, Pytorch, Tensorflow, Linux, Docker
