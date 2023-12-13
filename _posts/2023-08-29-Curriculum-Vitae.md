@@ -23,9 +23,6 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
   - Korea Institute of Science and Technology Information (KISTI), Daejeon : 2021.07 ~ 2021.08
 
 ### Publication
-
-- Jeongho Kim, Taejune Kim, **Jeonghyeon Kim**, Simon S. Woo, "Evading Deepfake Detectors via High Quality Face Pre-Processing Methods", _IEEE International Conference on Pattern Recognition (ICPR), August 2022 (Oral)_
-
 - Jihyo Kim, **Jeonghyeon Kim**, Sangheum Hwang, "Deep Active Learning with Contrastive Learning Under Realistic Data Pool Assumptions", _AAAI 2023 Workshop on Practical Deep Learning in the Wild_
 
 - **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, "Enhancing Out-of-Distribution Detection Performance of CLIP Based on Fine-tuning with Random Texts", _Korea Computer Congress 2023 (Oral)_
@@ -49,7 +46,6 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 ### Awards
 - 4th AI Grand Challenge Phase 3 Track 1 (1st - Minister's Award) : 2021
 - The AI Competition - Speaker Identification 2022 - (4th Public) : 2022
-- Korea Computer Congress 2022 (Paper Award) : 2022
 - Korea Computer Congress 2023 (Paper Award) : 2023
 
 ### Teaching
