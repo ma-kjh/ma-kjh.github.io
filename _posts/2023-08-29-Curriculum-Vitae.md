@@ -38,16 +38,7 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 - Korean : Native
 - English : Oral Proficiency Interview - Computer(OPIc) (IM2)
 
-### Projects
-- Samsung SDS Deepfake Detection
-  - Detecting Deepfakes : 2021 - 2022
-
-- Contrast CT
-  - Creating a contrast CT images using a generative model (CycleGAN) : 2021
-
 ### Awards
-- 4th AI Grand Challenge Phase 3 Track 1 (1st - Minister's Award) : 2021
-- The AI Competition - Speaker Identification 2022 - (4th Public) : 2022
 - Korea Computer Congress 2023 (Paper Award) : 2023
 
 ### Teaching
