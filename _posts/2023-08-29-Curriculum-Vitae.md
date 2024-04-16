@@ -38,8 +38,8 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 - Korean : Native
 
 ### Awards
-- Korea Computer Congress 2023 (Paper Award) : 2023
-- International Conference on Electronics, Information, and Communication (ICEIC) 2024 (Gold Prize) : 2024
+- Korea Computer Congress 2023 (Paper Award)
+- International Conference on Electronics, Information, and Communication (ICEIC) 2024 (Gold Prize)
 
 ### Teaching
 
