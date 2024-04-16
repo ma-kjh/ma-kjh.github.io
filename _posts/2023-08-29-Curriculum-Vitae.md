@@ -27,7 +27,7 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 - **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, "Enhancing Out-of-Distribution Detection Performance of CLIP Based on Fine-tuning with Random Texts", _Korea Computer Congress 2023 (Oral)_
 
-- **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, "Comparison of Out-Of-Distribution Detection Performance of CLIP-Based Fine-Tuning Methods", _International Conference on Electronics, Information, and Communication (ICEIC) 2024_
+- **Jeonghyeon Kim**, Jihyo Kim, Sangheum Hwang, "Comparison of Out-Of-Distribution Detection Performance of CLIP-Based Fine-Tuning Methods", _International Conference on Electronics, Information, and Communication (ICEIC) 2024 (Gold Prize)_
 
 ### Skills and Certificate
 - Languages & Software : Python, Pytorch, Tensorflow, Linux, Docker
@@ -36,12 +36,13 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 ### Languages
 - Korean : Native
-- English : Oral Proficiency Interview - Computer(OPIc) (IM2)
 
 ### Awards
 - Korea Computer Congress 2023 (Paper Award) : 2023
+- International Conference on Electronics, Information, and Communication (ICEIC) 2024 (Gold Prize) : 2024
 
 ### Teaching
 
 - Seoultech
   - 146048/41001 : Artificial Intelligence (Fall 2023) - TA
+  - 113044-41001 : Deep Learning (Spring 2024) - TA
