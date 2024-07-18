@@ -17,6 +17,7 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 - Out Of Distribution Detection
 - Multi-modal Representation Learning
 - Energy-Based-Modeling
+- Unlearning
 
 ### Experience
 - Summer Research Internship 
@@ -36,6 +37,7 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 
 ### Languages
 - Korean : Native
+- English : Bad
 
 ### Awards
 - Korea Computer Congress 2023 (Paper Award)
