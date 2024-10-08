@@ -35,10 +35,6 @@ Hi! I am a MS/Ph.d integrated student at Daintlab @ Seoultech, advised by Prof. 
 - Engineer Qulity Management : 20204010802Z.
 - Engineer Information Processing : 19201021536Y.
 
-### Languages
-- Korean : Native
-- English : Bad
-
 ### Awards
 - Korea Computer Congress 2023 (Paper Award)
 - International Conference on Electronics, Information, and Communication (ICEIC) 2024 (Gold Prize)
