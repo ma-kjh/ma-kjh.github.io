@@ -2,16 +2,16 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: <a href='https://github.com/ma-kjh'>GitHub</a> • <a href='https://scholar.google.com/citations?hl=en&user=u6DjYLsAAAAJ'>Google Scholar</a> • <a href='mailto:mawjdgus@ds.seoultech.ac.kr'>Email</a>
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Seoul, State 12345</p>
+#  more_info: >
+#    <p>555 your office number</p>
+#    <p>123 your address street</p>
+#    <p>Seoul, State 12345</p>
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
@@ -27,14 +27,13 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hi, I’m Jeonghyeon, Data Science Ph.D. student at SeoulTech, advised by Prof. Sangheum Hwang.
+Hi, I’m Jeonghyeon, Data Science Ph.D. student at <a href='https://www.seoultech.ac.kr'>SeoulTech</a>, advised by <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0'>Prof. Sangheum Hwang</a>.
 
-I recieved B.S in Information and Industrial System Engineering & B.S. in Electrical Information Engineering at Seoul National University of Science and Technology (SeoulTech).
+I recieved B.S in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoul National University of Science and Technology (SeoulTech).
 
 I'm interested in 
 
-- Multi-modal Representation Learning
-- Energy-based-models (EBMs)
+- Multi-Modal Representation Learning
 - Machine Unlearning
 
 Feel free to reach out if you'd like to chat or collaborate with me.
