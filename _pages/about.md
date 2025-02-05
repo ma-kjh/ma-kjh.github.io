@@ -31,7 +31,9 @@ I recieved B.S in Industrial and Information Systems Engineering & B.S. in Elect
 
 I'm interested in 
 
-- Multi-Modal Representation Learning
-- Machine Unlearning
+- AI Safety
+  - Out-of-distribution Detection
+  - Machine Unlearning
+- Representation Learning
 
 Feel free to reach out if you'd like to chat or collaborate with me.
