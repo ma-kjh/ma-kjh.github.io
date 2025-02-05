@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='https://github.com/ma-kjh'>GitHub</a>,<a href='https://scholar.google.com/citations?hl=en&user=u6DjYLsAAAAJ'>Google Scholar</a>,<a href='mawjdgus@ds.seoultech.ac.kr'>Email</a>
+subtitle: • <a href='https://github.com/ma-kjh'>GitHub</a> • <a href='https://scholar.google.com/citations?hl=en&user=u6DjYLsAAAAJ'>Google Scholar</a> • <a href='mawjdgus@ds.seoultech.ac.kr'>Email</a>
 
 profile:
   align: right
