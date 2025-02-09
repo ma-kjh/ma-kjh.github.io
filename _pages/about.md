@@ -35,6 +35,4 @@ I'm interested in
   - Out-of-distribution Detection
   - Machine Unlearning
 - Representation Learning
-  - Multi-Modality
-
-Feel free to reach out if you'd like to chat or collaborate with me.
+  - Multi-Modal Representation
