@@ -79,7 +79,18 @@ ninja.data = [{
               handler: () => {
                 window.location.href = "/blog/";
               },
-            },{id: "post-dive-into-clip",
+            },{id: "post-dive-into-tofu",
+      
+        title: "Dive into TOFU",
+      
+      description: "Code with me",
+      section: "Posts",
+      handler: () => {
+        
+          window.location.href = "/blog/2025/TOFU-code/";
+        
+      },
+    },{id: "post-dive-into-clip",
       
         title: "Dive into CLIP",
       
