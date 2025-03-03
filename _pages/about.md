@@ -28,12 +28,9 @@ latest_posts:
 
 Hi, I’m Jeonghyeon, Data Science Ph.D. student at <a href='https://www.seoultech.ac.kr'>SeoulTech</a>, advised by <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0'>Prof. Sangheum Hwang</a>.
 
-I recieved B.S in Industrial and Information Systems Engineering & B.S. in Electrical and Information Engineering at Seoul National University of Science and Technology (SeoulTech).
+I recieved B.S in Industrial Engineering & Electrical and Information Engineering at Seoul National University of Science and Technology (SeoulTech).
 
 I'm interested in 
 
 - AI Safety
-  - Out-of-distribution Detection
-  - Machine Unlearning
 - Representation Learning
-  - Multi-Modal Representation
