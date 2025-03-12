@@ -28,11 +28,18 @@ latest_posts:
 
 **Please check back later!**
 
-Hi, I’m Jeonghyeon, Data Science Ph.D. student at <a href='https://www.seoultech.ac.kr'>SeoulTech</a>, advised by <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0'>Prof. Sangheum Hwang</a>.
+Hello! My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science at <a href='https://www.seoultech.ac.kr'>SeoulTech</a>, advised by <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0'>Prof. Sangheum Hwang</a> of <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/'>DAINTLAB</a>.
 
-I recieved B.S in Industrial Engineering & Electrical and Information Engineering at Seoul National University of Science and Technology (SeoulTech).
+I am focused on enhancing the reliability and interpretability of AI systems, particularly through:
 
-I'm interested in 
+- Out-of-distribution (OoD) detection
+- LLM unlearning
+- Energy-based models (EBMs)
 
-- AI Safety
-- Representation Learning
+Research Focus
+
+My research has explored OoD detection in vision-language models (VLMs), leveraging multi-modal representation fine-tuning and interpreting them through EBMs. Moving forward, I aim to extend my research to pre-training and multi-modal large language models (MLLMs).
+
+💥Ultimate Goal
+
+To develop AI systems that are reliable, and interpretable, ensuring their trustworthy deployment in real-world applications.
