@@ -5,7 +5,7 @@ permalink: /
 subtitle: • <a href='https://github.com/ma-kjh'>GitHub</a> • <a href='https://scholar.google.com/citations?hl=en&user=u6DjYLsAAAAJ'>Google Scholar</a> • <a href='www.linkedin.com/in/jeonghyeon-kim-05b9a4349'>LinkedIn</a> • <a href='mailto:mawjdgus@ds.seoultech.ac.kr'>Email</a> 
 
 profile:
-  align: right
+  align: center
   image: jeonghyeonkim-pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
