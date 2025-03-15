@@ -401,12 +401,7 @@ ninja.data = [{
           window.location.href = "/blog/2015/formatting-and-links/";
         
       },
-    },{id: "news-a-long-announcement-with-details",
-          title: 'A long announcement with details',
-          description: "",
-          section: "News",handler: () => {
-              window.location.href = "/news/announcement_2/";
-            },},{id: "news-enhanced-ood-detection-through-cross-modal-alignment-of-multi-modal-representations-has-been-accepted-at-cvpr-2025",
+    },{id: "news-enhanced-ood-detection-through-cross-modal-alignment-of-multi-modal-representations-has-been-accepted-at-cvpr-2025",
           title: '“Enhanced OoD Detection through Cross-Modal Alignment of Multi-Modal Representations” has been accepted at...',
           description: "",
           section: "News",},{id: "projects-project-1",
