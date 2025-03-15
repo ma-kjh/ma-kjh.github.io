@@ -406,8 +406,8 @@ ninja.data = [{
           description: "",
           section: "News",handler: () => {
               window.location.href = "/news/announcement_2/";
-            },},{id: "news-enhanced-ood-detection-through-cross-modal-alignment-of-multi-modal-representations-was-accepted-to-cvpr-2025-and-will-be-presented-in-nashville-usa-in-june-2025",
-          title: '“Enhanced OoD Detection through Cross-Modal Alignment of Multi-Modal Representations” was accepted to CVPR...',
+            },},{id: "news-cvpr-2025-enhanced-ood-detection-through-cross-modal-alignment-of-multi-modal-representations-was-accepted-to-cvpr-2025-and-will-be-presented-in-nashville-usa-in-june-2025",
+          title: '[🎉 CVPR 2025 🎉] “Enhanced OoD Detection through Cross-Modal Alignment of Multi-Modal Representations”...',
           description: "",
           section: "News",},{id: "projects-project-1",
           title: 'project 1',
