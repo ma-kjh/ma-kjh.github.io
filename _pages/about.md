@@ -22,9 +22,6 @@ latest_posts:
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
-**Sorry, this website has not been updated yet.**
-
-**Please check back later!**
 
 Hello! My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science at <a href='https://www.seoultech.ac.kr'>SeoulTech</a>, advised by <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0'>Prof. Sangheum Hwang</a> of <a href='https://sites.google.com/ds.seoultech.ac.kr/daintlab/'>DAINTLAB</a>.
 
