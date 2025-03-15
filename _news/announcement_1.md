@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-[🎉 CVPR 2025 🎉] "Enhanced OoD Detection through Cross-Modal Alignment of Multi-Modal Representations" was accepted to CVPR 2025 and will be presented in Nashville, USA in June 2025.
+🎉 "Enhanced OoD Detection through Cross-Modal Alignment of Multi-Modal Representations" was accepted to CVPR 2025 and will be presented in Nashville, USA in June 2025.
