@@ -16,18 +16,7 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
-        },{id: "post-",
-      
-        title: "",
-      
-      description: "",
-      section: "Posts",
-      handler: () => {
-        
-          window.location.href = "/blog/2025/2025-02-10-SOUL-review/";
-        
-      },
-    },{id: "post-dive-into-tofu",
+        },{id: "post-dive-into-tofu",
       
         title: "Dive into TOFU",
       
