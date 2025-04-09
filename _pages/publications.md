@@ -9,6 +9,11 @@ author_profile: true
   {% for post in site.publications reversed %}
   <tr>
     <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px;">
+      {% if post.topic %}
+        <div style="position:absolute; top:8px; left:8px; background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:2px 6px; font-size:12px; border-radius:5px; font-weight:bold;">
+        {{ post.topic }}
+        </div>
+      {% endif %}
       <img src="/{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
     </td>
     <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
