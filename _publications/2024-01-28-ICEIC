@@ -1,0 +1,16 @@
+---
+title: "Comparison of Out-of-Distribution Detection Performance of CLIP-based Fine-Tuning Methods"
+collection: publications
+permalink: /publication/2024-01-28-ICEIC
+excerpt: ""
+date: 2024-01-28
+venue: "International Conference on Electronics, Information, and Communication (ICEIC)"
+paper: "https://ieeexplore.ieee.org/document/10457104"
+citation: ""
+topic: "VLM-OoDD"
+authors: "<strong>Jeonghyeon Kim</strong>, Jihyo Kim, Sangheum Hwang"
+image: "images/ICEIC2024.png"
+selected: true
+oral: true
+best_paper_award: true
+---
