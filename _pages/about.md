@@ -25,15 +25,26 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
   {% assign selected_publications = site.publications | where: "selected", true | reverse %}
   {% for post in selected_publications %}
   <tr>
-    <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px; position: relative;">
-      <img src="/{{ post.image }}" alt="project image" style="display:block; width:auto; height:auto; max-width:100%;" />
-    </td>
-    <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
-      <h3 style="font-size:22px; margin-bottom:10px;">{{ post.title }}</h3>
-      <div style="margin-bottom:10px;">{{ post.authors }}</div>
-      <div style="margin-bottom:10px;">
-        <em>{{ post.venue }}</em>, {{ post.date | date: "%Y" }}
+    <td style="border: none; padding:0; width:25%; vertical-align:middle; max-width:100px; max-height:100px;">
+  <!-- 이미지 & 토픽 컨테이너 -->
+  <div style="display: inline-block; margin:0; padding:0;">
+    {% if post.topic %}
+      <!-- Topic 배지: 시크한 회색 박스, 바로 위에 붙임 -->
+      <div style="background-color:#444; color:#fff; font-style: italic; 
+                  border:none; border-radius:0; padding:4px 8px; 
+                  margin-bottom:4px; display:inline-block;">
+        {{ post.topic }}
       </div>
+    {% endif %}
+    <!-- 실제 이미지 -->
+    <img src="/{{post.image}}" alt="project image" 
+         style="display:block; width:auto; height:auto; max-width:100%; margin:0; padding:0;" />
+  </div>
+</td>
+    <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
+      <h3 style="font-size:22px; margin-bottom:10px;">{{post.title}}</h3>
+      <div style="margin-bottom:10px;">{{post.authors}}</div>
+      <div style="margin-bottom:10px;"><em>{{post.venue}}</em>, {{ post.date | date: "%Y" }}</div>
       <div style="margin-bottom:10px;">
         {% if post.paper %}
           <a href="{{post.paper}}"
@@ -81,29 +92,19 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
           </span>
         {% endif %}
         {% if post.web %}
-          <a href="{{ post.web }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
-            website
-          </a>
+          <a href="{{post.web}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">website</a>
         {% endif %}
         {% if post.video %}
-          <a href="{{ post.video }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
-            video
-          </a>
+          <a href="{{post.video}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">video</a>
         {% endif %}
         {% if post.poster %}
-          / <a href="{{ post.poster }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
-            poster
-          </a>
+          / <a href="{{post.poster}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">poster</a>
         {% endif %}
         {% if post.slides %}
-          / <a href="{{ post.slides }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
-            slides
-          </a>
+          / <a href="{{post.slides}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">slides</a>
         {% endif %}
         {% if post.dataset %}
-          / <a href="{{ post.dataset }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
-            dataset
-          </a>
+          / <a href="{{post.dataset}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">dataset</a>
         {% endif %}
       </div>
       <div>
