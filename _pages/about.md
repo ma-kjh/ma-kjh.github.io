@@ -19,3 +19,18 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
  
  To develop AI systems that are reliable, and interpretable, ensuring their trustworthy deployment in real-world applications.
 
+## Selected Publications
+
+{% assign selected_publications = site.publications | where: "selected", true %}
+{% if selected_publications != empty %}
+<ul>
+  {% for pub in selected_publications %}
+  <li>
+    <a href="{{ pub.permalink }}">{{ pub.title }}</a>
+    – <em>{{ pub.venue }}</em> ({{ pub.date | date: "%Y" }})
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No selected publications available.</p>
+{% endif %}
