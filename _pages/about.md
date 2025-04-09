@@ -35,23 +35,53 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
         <em>{{ post.venue }}</em>, {{ post.date | date: "%Y" }}
       </div>
       <div style="margin-bottom:10px;">
+        <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
+      <h3 style="font-size:22px; margin-bottom:10px;">{{post.title}}</h3>
+      <div style="margin-bottom:10px;">{{post.authors}}</div>
+      <div style="margin-bottom:10px;"><em>{{post.venue}}</em>, {{ post.date | date: "%Y" }}</div>
+      <div style="margin-bottom:10px;">
         {% if post.paper %}
-          <a href="{{ post.paper }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-top:8px;">
+          <a href="{{post.paper}}"
+             style="
+               font-style: italic;
+               background-color: #444;
+               color: #fff;
+               border: none;
+               border-radius: 0;
+               padding: 4px 10px;
+               text-align: center;
+               text-decoration: none;
+               display: inline-block;
+               margin-top: 8px;
+             ">
             paper
           </a>
         {% endif %}
         {% if post.code %}
-          <a href="{{ post.code }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
+          <a href="{{post.code}}"
+             style="
+               font-style: italic;
+               background-color: #444;
+               color: #fff;
+               border: none;
+               border-radius: 0;
+               padding: 4px 10px;
+               text-align: center;
+               text-decoration: none;
+               display: inline-block;
+               margin-left: 4px;
+               margin-top: 8px;
+             ">
             code
           </a>
         {% endif %}
         {% if post.oral %}
-          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-right:4px; margin-top:8px;">
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-left:4px; margin-top:8px;">
             Oral
           </span>
         {% endif %}
         {% if post.best_paper_award %}
-          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-right:4px; margin-top:8px;">
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-left:4px; margin-top:8px;">
             Best Paper Award
           </span>
         {% endif %}
