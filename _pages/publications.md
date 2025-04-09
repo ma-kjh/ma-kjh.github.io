@@ -8,17 +8,22 @@ author_profile: true
 <table style="width:100%; border:0; border-spacing:0; border-collapse:separate; margin-right:auto; margin-left:auto; font-size:18px;">
   {% for post in site.publications reversed %}
   <tr>
-    <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px; position: relative;">
-      {% if post.topic %}
-        <div style="position: absolute; top: 0; left: 0; width: 100%; 
-              background-color: rgba(240,240,240, 0.8); color: #4CAF50; 
-              border: 1px solid #4CAF50; padding: 2px 6px; 
-              font-size: 12px; border-radius: 0 0 5px 5px; 
-              font-weight: bold; text-align: center;">
-          {{ post.topic }}
-        </div>
-      {% endif %}
-      <img src="/{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
+    <td style="border: none; padding:0; width:25%; vertical-align:middle; max-width:100px; max-height:100px;">
+      <div style="position: relative; display: inline-block; margin:0; padding:0;">
+        <img src="/{{post.image}}" 
+             alt="project image" 
+             style="display:block; width:auto; height:auto; max-width:100%; margin:0; padding:0;" />
+        
+        {% if post.topic %}
+          <div style="position:absolute; top:0; left:0; 
+                      background-color: rgba(240,240,240, 0.8); 
+                      color:#4CAF50; border:1px solid #4CAF50; 
+                      padding:2px 6px; font-size:12px; border-radius:5px; 
+                      font-weight:bold;">
+            {{ post.topic }}
+          </div>
+        {% endif %}
+      </div>
     </td>
     <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
       <h3 style="font-size:22px; margin-bottom:10px;">{{post.title}}</h3>
