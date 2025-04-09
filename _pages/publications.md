@@ -64,6 +64,16 @@ author_profile: true
             code
           </a>
         {% endif %}
+        {% if post.oral %}
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-left:4px; margin-top:8px;">
+            Oral
+          </span>
+        {% endif %}
+        {% if post.best_paper_award %}
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-left:4px; margin-top:8px;">
+            Best Paper Award
+          </span>
+        {% endif %}
         {% if post.web %}
           <a href="{{post.web}}" style="background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px; border-radius:5px;">website</a>
         {% endif %}
