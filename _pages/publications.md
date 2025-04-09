@@ -5,17 +5,25 @@ permalink: /publications/
 author_profile: true
 ---
 
+
 <table style="width:100%; border:0; border-spacing:0; border-collapse:separate; margin-right:auto; margin-left:auto; font-size:18px;">
   {% for post in site.publications reversed %}
   <tr>
-    <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px; position: relative;">
+    <div style="display: inline-block; max-width:100%; text-align:center;">
+      <!-- 토픽 배지 (이미지와 겹치지 않고 위에 별도 배치) -->
       {% if post.topic %}
-        <div style="position:absolute; top:8px; left:8px; background-color:#f0f0f0; color:#4CAF50; border:1px solid #4CAF50; padding:2px 6px; font-size:12px; border-radius:5px; font-weight:bold;">
+        <div style="background-color:#f0f0f0; color:#4CAF50; 
+                    border:1px solid #4CAF50; padding:2px 6px; 
+                    font-size:12px; border-radius:5px; 
+                    font-weight:bold; margin-bottom:8px;">
           {{ post.topic }}
         </div>
       {% endif %}
-      <img src="/{{post.image}}" alt="project image" style="width:auto; height:auto; max-width:100%;" />
-    </td>
+      
+      <!-- 이미지 -->
+      <img src="/{{ post.image }}" alt="project image" 
+           style="display:block; width:auto; height:auto; max-width:100%;" />
+    </div>
     <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
       <h3 style="font-size:22px; margin-bottom:10px;">{{post.title}}</h3>
       <div style="margin-bottom:10px;">{{post.authors}}</div>
