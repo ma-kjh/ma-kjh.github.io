@@ -35,11 +35,6 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
         <em>{{ post.venue }}</em>, {{ post.date | date: "%Y" }}
       </div>
       <div style="margin-bottom:10px;">
-        <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
-      <h3 style="font-size:22px; margin-bottom:10px;">{{post.title}}</h3>
-      <div style="margin-bottom:10px;">{{post.authors}}</div>
-      <div style="margin-bottom:10px;"><em>{{post.venue}}</em>, {{ post.date | date: "%Y" }}</div>
-      <div style="margin-bottom:10px;">
         {% if post.paper %}
           <a href="{{post.paper}}"
              style="
