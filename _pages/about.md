@@ -25,18 +25,12 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
   {% assign selected_publications = site.publications | where: "selected", true | reverse %}
   {% for post in selected_publications %}
   <tr>
-    <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px; position: relative;">
-      {% if post.topic %}
-        <div style="background-color:#444; color:#fff; font-style: italic; border:none; border-radius:5px; padding:4px 8px; margin-bottom:4px; display:inline-block;">
-          {{ post.topic }}
-        </div>
-      {% endif %}
-      <img src="/{{ post.image }}" alt="project image" style="display:block; width:auto; height:auto; max-width:100%;" />
-    </td>
-    <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
+    <td style="border: none; padding:2.5%; vertical-align:middle;">
       <h3 style="font-size:22px; margin-bottom:10px;">{{ post.title }}</h3>
       <div style="margin-bottom:10px;">{{ post.authors }}</div>
-      <div style="margin-bottom:10px;"><em>{{ post.venue }}</em>, {{ post.date | date: "%Y" }}</div>
+      <div style="margin-bottom:10px;">
+        <em>{{ post.venue }}</em>, {{ post.date | date: "%Y" }}
+      </div>
       <div style="margin-bottom:10px;">
         {% if post.paper %}
           <a href="{{ post.paper }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-top:8px;">
