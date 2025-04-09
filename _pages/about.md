@@ -25,7 +25,10 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
   {% assign selected_publications = site.publications | where: "selected", true | reverse %}
   {% for post in selected_publications %}
   <tr>
-    <td style="border: none; padding:2.5%; vertical-align:middle;">
+    <td style="border: none; padding:2.5%; width:25%; vertical-align:middle; max-width:100px; max-height:100px; position: relative;">
+      <img src="/{{ post.image }}" alt="project image" style="display:block; width:auto; height:auto; max-width:100%;" />
+    </td>
+    <td style="border: none; padding:2.5%; width:75%; vertical-align:middle;">
       <h3 style="font-size:22px; margin-bottom:10px;">{{ post.title }}</h3>
       <div style="margin-bottom:10px;">{{ post.authors }}</div>
       <div style="margin-bottom:10px;">
@@ -41,6 +44,16 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
           <a href="{{ post.code }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
             code
           </a>
+        {% endif %}
+        {% if post.oral %}
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-right:4px; margin-top:8px;">
+            Oral
+          </span>
+        {% endif %}
+        {% if post.best_paper_award %}
+          <span style="font-style: italic; background-color:#fff; color:#444; border:1px solid #444; border-radius:5px; padding:4px 10px; text-align:center; display:inline-block; margin-right:4px; margin-top:8px;">
+            Best Paper Award
+          </span>
         {% endif %}
         {% if post.web %}
           <a href="{{ post.web }}" style="font-style: italic; background-color:#444; color:#fff; border:none; border-radius:5px; padding:4px 10px; text-align:center; text-decoration:none; display:inline-block; margin-left:4px; margin-top:8px;">
