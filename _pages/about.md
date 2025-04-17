@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Towards Safe and Reliable Artificial Intelligence"
+title: "Towards Safe and Reliable Foundation Models"
 author_profile: true
 redirect_from: 
   - /about/
@@ -11,9 +11,9 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
 
  🧗‍♂️I am dedicated to enhancing the reliability and interpretability of AI systems, particularly through:
  
- - Out-of-distribution detection (OoDD)
- - Vision-Langauge Models (VLMs)
- - LLM unlearning
+ - Out-of-distribution detection
+ - Representation Learning
+ - Machine Unlearning
 
  💥Ultimate Goal
  
