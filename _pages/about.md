@@ -12,8 +12,8 @@ Hi there👋 My name is Jeonghyeon Kim, and I am a Ph.D. student in Data Science
  🧗‍♂️I am dedicated to enhancing the reliability and interpretability of AI systems, particularly through:
  
  - Out-of-distribution detection (OoDD)
+ - Vision-Langauge Models (VLMs)
  - LLM unlearning
- - Energy based models (EBMs)
 
  💥Ultimate Goal
  
