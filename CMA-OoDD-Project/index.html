@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
+  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enhanced OoD Detection through Cross-Modal Alignment of Multi-modal Representations</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <script
+    async
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    type="text/javascript"
+  ></script>
+
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://ma-kjh.github.io">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://ieeexplore.ieee.org/abstract/document/10457104">
+            Comparison of OoDD of CLIP based FT
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">Enhanced OoD Detection through Cross-Modal Alignment of Multi-modal Representations</h1>
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.co.kr/citations?user=u6DjYLsAAAAJ&hl=ko">Jeonghyeon Kim</a>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.co.kr/citations?user=QtI8XmgAAAAJ&hl=ko">Sangheum Hwang</a>,</span>
+          </div>
+
+          
+
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">Seoul National University of Science and Technology</span>
+          </div>
+          <div class="is-size-4 publication-authors">
+           <span class="author-block">🎉 CVPR 2025 🎉</span>
+          </div>
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">This page has not been updated yet. Please stay tuned for further updates.</span>
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <!--- 채우기 --->
+                <a href="" 
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <!--- 채우기 --->
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/ma-kjh/CMA-OoDD"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+        <img src="./static/images/teaser.jpg" alt="테저 이미지" style="max-width: 100%;">
+      <h2 class="subtitle has-text-centered">
+        Bridging the modality gap between image and text embeddings via cross-modal alignment
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Prior research on out-of-distribution detection (OoDD) has primarily focused on single-modality models. 
+            Recently, with the advent of large-scale pretrained vision-language models such as CLIP, OoDD methods utilizing such multi-modal representations through zero-shot and prompt learning strategies have emerged. 
+            However, these methods typically involve either freezing the pretrained weights or only partially tuning them, which can be suboptimal for downstream datasets. 
+            In this paper, we highlight that multi-modal fine-tuning (MMFT) can achieve notable OoDD performance. 
+          </p>
+          <p>
+            Despite some recent works demonstrating the impact of fine-tuning methods for OoDD, there remains significant potential for performance improvement. 
+            We investigate the limitation of naive fine-tuning methods, examining why they fail to fully leverage the pretrained knowledge. 
+            Our empirical analysis suggests that this issue could stem from the modality gap within in-distribution (ID) embeddings.
+          </p>
+          <p>
+            To address this, we propose a training objective that enhances cross-modal alignment by regularizing the distances between image and text embeddings of ID data.
+            This adjustment helps in better utilizing pretrained textual information by aligning similar semantics from different modalities (i.e., text and image) more closely in the hyperspherical representation space. 
+            We theoretically demonstrate that the proposed regularization corresponds to the maximum likelihood estimation of an energy-based model on a hypersphere. 
+            Utilizing ImageNet-1k OoD benchmark datasets, we show that our method, combined with post-hoc OoDD approaches leveraging pretrained knowledge (e.g., NegLabel), significantly outperforms existing methods, achieving state-of-the-art OoDD performance and leading ID accuracy.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <!-- 제목 -->
+        <h2 class="title is-3">The Key Idea: Cross-Model Alignment</h2>
+        <!-- figure: 세 개 이미지를 하나의 그룹으로 묶고, 공통 캡션 달기 -->
+        <figure class="box" style="padding: 1rem;">
+          <!-- 세 개의 이미지(좌우로 3열) -->
+          <div class="columns">
+            
+            <!-- 첫 번째 이미지 컬럼 -->
+            <div class="column">
+              <img 
+                src="./static/images/ZS_fig.jpg" 
+                alt="Figure 1" 
+                style="max-width: 100%; height: auto;"
+              />
+              <!-- 필요하다면, 각 이미지 아래에 짧은 부제목(소캡션)도 가능 -->
+              <p style="margin-top: 0.5rem;">
+                <small>Figure 1. ZS</small>
+              </p>
+            </div>
+            
+            <!-- 두 번째 이미지 컬럼 -->
+            <div class="column">
+              <img 
+                src="./static/images/FLYP_fig.jpg" 
+                alt="Figure 2" 
+                style="max-width: 100%; height: auto;"
+              />
+              <p style="margin-top: 0.5rem;">
+                <small>Figure 2. FLYP</small>
+              </p>
+            </div>
+            
+            <!-- 세 번째 이미지 컬럼 -->
+            <div class="column">
+              <img 
+                src="./static/images/CMA_fig.jpg" 
+                alt="Figure 3" 
+                style="max-width: 100%; height: auto;"
+              />
+              <p style="margin-top: 0.5rem;">
+                <small>Figure 3. CMA</small>
+              </p>
+            </div>
+          </div>
+
+          <!-- 전체 그림 그룹에 대한 공통 캡션 -->
+          <figcaption class="has-text-centered" style="margin-top: 1rem;">
+            <small>
+              The figures above illustrate the visualization of <a href="https://arxiv.org/abs/1609.01977" target="_blank">DOSNES</a>  on the ImageNet-1k validation dataset and the MOS benchmark dataset. Blue and orange represent ID image and ID text embeddings, respectively, while green and red represent OoD image and OoD text embeddings.
+            </small>
+          </figcaption>
+        </figure>
+        <!-- 일반 본문 -->
+        <div class="content has-text-justified">
+          <p>
+            As shown in the figure, existing pre-trained image-text representations exhibit a modality gap, and simply applying the same CLIP-style fine-tuning does not resolve this issue. 
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            The key idea behind CMA involves two main components: 
+            1) alignment between the image and text modalities of the ID data to effectively
+            separate negative text embeddings, and 
+            2) correspondence between matching ID image-text pairs to maintain ID accuracy.
+            To implement these ideas, we employ a contrastive loss for each modality with an additional CMA regularization loss. 
+          </p>
+        </div>
+        
+        <div class="content has-text-centered" style="margin: 2rem 0;">
+          <!-- (2) CMA 수식 -->
+          \[
+            \mathcal{L}^k_{\text{imageCMA}}
+              = -\log \sum_{j=1}^{B} \exp\Bigl(i_k \cdot t_j / {\tau}\Bigr),
+            \quad
+            \mathcal{L}^k_{\text{textCMA}}
+              = -\log \sum_{j=1}^{B} \exp\Bigl(i_j \cdot t_k /{ \tau}\Bigr),
+          \]
+
+          \[
+            \mathcal{L}_{CMA}
+              = \mathcal{L}_{CLIP}
+                + \frac{\lambda}{2B}
+                  \sum_{k=1}^{B} 
+                  \Bigl(\mathcal{L}^k_{\text{imageCMA}} + \mathcal{L}^k_{\text{textCMA}}\Bigr).
+          \]
+        </div>
+        
+        <div class="content has-text-justified">
+          <p>
+            The proposed CMA losses work by globally increasing the similarity between ID image and text pairs, causing the ID modalities to be well-aligned on the hypersphere. 
+            As a result, the separability from the pretrained negative concepts can be enhanced, allowing for more effective OoDD.
+          </p>
+        </div>
+
+        <div class="box" style="margin-top: 2rem;">
+          <h3 class="title is-5">Realtion to EBMs</h3>
+            <div class="content has-text-centered" style="margin: 2rem 0;">
+                \[
+                \max_\theta \mathbb{E}_p \left[ \log q_\theta(i,t) \right] &= 
+                \max_\theta \frac{1}{2} \mathbb{E}_p \left[ \log q_\theta(t|i) + \log q_\theta(i) \right] \notag \\
+                & + \frac{1}{2} \mathbb{E}_p \left[ \log q_\theta(i|t) + \log q_\theta(t) \right]
+                \]
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- 전체를 가운데 정렬하기 위해 columns + is-centered 사용 -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <!-- 제목 -->
+        <h2 class="title is-3">Main Results</h2>
+        <!-- 본문 -->
+        <p>
+          Blah, Blah
+        </p>
+        <div class="box" style="margin-top: 2rem;">
+          <h3 class="title is-5">Blah</h3>
+          <ul class="content has-text-left">
+            <li>Blah</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
+
+<!-- Bulma CSS가 연결되어 있다고 가정합니다 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- 전체를 가운데 정렬하기 위해 columns + is-centered 사용 -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <!-- 제목 -->
+        <h2 class="title is-3">Conclusion</h2>
+        <!-- 본문 -->
+        <p>
+          We introduce cross-modal alignment (CMA), a novel multi-modal fine-tuning (MMFT) method 
+          that achieves state-of-the-art performance in both OoDD and ID accuracy.
+        </p>
+        <div class="box" style="margin-top: 2rem;">
+          <h3 class="title is-5">Key Contributions</h3>
+          <ul class="content has-text-left">
+            <li>First integration of differential attention into CLIP-based VLMs.</li>
+            <li>Consistent gains over baseline CLIP with minimal overhead.</li>
+            <li>Detailed ablations highlighting improved zero-shot performance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
