@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-Hello, I’m Jeonghyeon Kim, a Ph.D. candidate in Data Science at [Seoul National University of Science and Technology (SeoulTech)](https://www.seoultech.ac.kr), where I am privileged to be advised by [Prof. Sangheum Hwang](https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0) of [DAINTLAB](https://sites.google.com/ds.seoultech.ac.kr/daintlab/).
+Hello, I’m Jeonghyeon Kim, a Ph.D. student in Data Science at [Seoul National University of Science and Technology (SeoulTech)](https://www.seoultech.ac.kr), where I am privileged to be advised by [Prof. Sangheum Hwang](https://sites.google.com/ds.seoultech.ac.kr/daintlab/members/director?authuser=0) of [DAINTLAB](https://sites.google.com/ds.seoultech.ac.kr/daintlab/).
 
 My research is driven by the ambition to advance the frontier of trustworthy AI, with a focus on making machine learning systems more robust, reliable, and interpretable in real-world scenarios. I specialize in:
 
