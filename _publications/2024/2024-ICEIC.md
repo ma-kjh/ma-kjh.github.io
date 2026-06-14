@@ -15,5 +15,5 @@ authors:
   - Jihyo KIm
   - Sangheum Hwang
 links:
-  link: https://ieeexplore.ieee.org/document/10457104
+  Paper: https://ieeexplore.ieee.org/document/10457104
 ---
