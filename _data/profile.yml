@@ -63,12 +63,31 @@ awards:
 - name: Best Paper Award (KCC2023)
   date: 2023
 
-# Teaching Experience:
-# - name: Neural Networks and Deep Learning
-# - date: Spring 2026
-# - name: Deep Learning
-# - date: Spring 2024
-# - name: Artificial Intelligence
-# - date: Fall 2023
+teaching:
+- course: Neural Networks and Deep Learning
+- role: Teaching Assistant
+- instructor: Prof. Sangheum Hwang
+- date: Spring 2026
+- course: Deep Learning
+- role: Teaching Assistant
+- instructor: Prof. Sangheum Hwang
+- date: Spring 2024
+- course: Artificial Intelligence
+- role: Teaching Assistant
+- instructor: Prof. Sangheum Hwang
+- date: Fall 2023
 
+talks:
+- venue: KCC 2026
+  title: Localized Concept Erasure in Text-to-Image Diffusion Models via High-Level Representation Misdirection
+  note: "Oral · presenter: Uichan Lee · Jeju, ICC Jeju"
+- venue: KCC 2026
+  title: Enhanced OoD Detection through Cross-Modal Alignment
+  note: "Oral · Jeju, ICC Jeju"
+- venue: KCCV 2025
+  title: Enhanced OoD Detection through Cross-Modal Alignment
+  note: "Poster · Busan, Bexco"
+- venue: KSIIM 2025
+  title: Enhanced OoD Detection through Cross-Modal Alignment
+  note: "Oral · Seoul, Seoul National University College of Medicine"
 
