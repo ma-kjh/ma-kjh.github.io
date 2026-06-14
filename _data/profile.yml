@@ -23,7 +23,7 @@ short_bio_text_justify: false
 short_bio: >-
   <p>
     I am a Ph.D. student at Seoul National University of Science and Technology, advised by
-    (Sangheum Hwang)[https://scholar.google.com/citations?user=QtI8XmgAAAAJ&hl=ko]. 
+    [Sangheum Hwang](https://scholar.google.com/citations?user=QtI8XmgAAAAJ&hl=ko). 
   </p>
   The thread running through my work is understanding what a model does not know, and when it should not be trusted. 
   I work on out-of-distribution detection and uncertainty estimation, often with large-scale vision-language models such as CLIP, studying how fine-tuning shapes a model’s ability to recognize inputs it was never trained on. 
