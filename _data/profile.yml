@@ -3,9 +3,9 @@ secondary_name: ""
 navbar_name: "Jeonghyeon Kim"
 
 positions:
-- name: Title or Position
-- name: Affiliation Name
-  logo: /assets/images/badges/MIT_Social_circle.png  # Logo is optional
+- name: Ph.D. student
+- name: Seoul National University of Science and Technology
+  logo: /assets/images/badges/SEAL.png  # Logo is optional
 
 
 email: "mawjdgus@ds.seoultech.ac.kr"
@@ -30,21 +30,21 @@ short_bio: >-
     as well as being common in domestic longhair and domestic shorthair cats.
   </p>
 
-portrait_url: /assets/images/photos/portrait.jpg
-portrait_caption: >-
-  Photo by Manja Vitolic on Unsplash (this caption is optional, comment it out to disable).
+portrait_url: /assets/images/photos/jeonghyeonkim.jpg
+# portrait_caption: >-
+  # Photo by Manja Vitolic on Unsplash (this caption is optional, comment it out to disable).
 
 education:
-- name: Massachusetts Institute of Technology
-  logo: /assets/images/badges/MIT_Social_circle.png
+- name: Seoul National University of Science and Technology
+  logo: /assets/images/badges/SEAL.png
   position: >- 
-    Department of Electrical Engineering and Computer Science <br/>
+    Department of Data Science <br/>
     Ph.D. Student
-  date: Sep. 2024 - present
-- name: Peking University
-  logo: /assets/images/badges/PKU_red.png
-  position: B.S. in Computer Science
-  date: Sep. 2019 - Jul. 2021
+  date: Mar. 2023 - present
+- name: Seoul National University of Science and Technology
+  logo: /assets/images/badges/SEAL.png
+  position: B.S. in Industrial Engineering
+  date: Sep. 2016 - Feb. 2022
 
 # experience:
 # - name: Peking University
@@ -53,9 +53,9 @@ education:
 #   date: Sep. 2019 - Jul. 2021
 
 awards:
-- name: Award Name 2
+- name: Best Paper Award (KCC2026)
+  date: 2026
+- name: Best Paper Award (ICEIC2024)
   date: 2024
-- name: Award Name 1 
-  date: 2021
-- name: A quick brown fox jumps over the lazy dog and runs away award
-  date: 2021
+- name: Best Paper Award (KCC2023)
+  date: 2023
