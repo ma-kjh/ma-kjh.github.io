@@ -9,7 +9,7 @@ pub_last:       ' <span class="badge badge-pill badge-publication badge-success"
 pub_date:       "2024"
 abstract: >-
   We present a comprehensive comparison of CLIP-based fine-tuning methods, evaluating not only in-distribution classification but also out-of-distribution (OOD) detection, which is often overlooked despite its importance for model reliability. Using the OpenOOD v1.5 benchmark, we analyze how different fine-tuning strategies affect both aspects of performance. Our results show that fine-tuning the entire model achieves the best performance in both classification and OOD detection under few-shot settings.
-cover:          /assets/images/covers/ICEIC2024.jpg
+cover:          /assets/images/covers/ICEIC2024.png
 authors:
   - <strong>Jeonghyeon Kim</strong>
   - Jihyo KIm
