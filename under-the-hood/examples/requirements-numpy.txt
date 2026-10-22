@@ -1,0 +1,4 @@
+# Python >=3.10. The bundled reference trace was generated with NumPy 2.3.5.
+# This range is suitable for the educational implementation; exact package
+# versions are recorded in each exported trace.
+numpy>=1.26,<3

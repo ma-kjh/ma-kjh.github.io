@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Under the Hood · Jeonghyeon Kim</title>
+<meta name="description" content="Notes on how language models work: word vectors, attention, KV caching, and modern architectures, with equations, tensor shapes, and executable code.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://ma-kjh.github.io/under-the-hood/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Under the Hood">
+<meta property="og:description" content="Notes on how language models work: word vectors, attention, KV caching, and modern architectures, with equations, tensor shapes, and executable code.">
+<meta property="og:url" content="https://ma-kjh.github.io/under-the-hood/">
+<link rel="icon" href="/under-the-hood/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/under-the-hood/assets/research.css">
+
+<script defer src="/under-the-hood/assets/research.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "headline": "Under the Hood", "description": "Notes on how language models work: word vectors, attention, KV caching, and modern architectures, with equations, tensor shapes, and executable code.", "url": "https://ma-kjh.github.io/under-the-hood/", "author": {"@type": "Person", "name": "Jeonghyeon Kim", "url": "https://ma-kjh.github.io"}, "inLanguage": "en", "dateModified": "2026-10-22"}</script>
+</head><body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="shell">
+  <a class="brand" href="/">Jeonghyeon Kim</a>
+  <button class="menu-button" data-menu aria-expanded="false" aria-controls="site-nav">Menu</button>
+  <nav class="topnav" id="site-nav" aria-label="Main navigation">
+    <a class="active" href="/under-the-hood/">Under the Hood</a>
+    <a href="/publications">Publications</a>
+    <a href="https://github.com/ma-kjh/ma-kjh.github.io/tree/main/under-the-hood">GitHub</a>
+  </nav>
+</div></header>
+<main id="main" class="shell">
+<section class="notebook-intro" aria-labelledby="notebook-title">
+  <h1 id="notebook-title">Under the Hood</h1>
+  <p class="notebook-description">Notes on how language models work.</p>
+  <p>From word vectors to attention and efficient inference, with the equations, tensor shapes, and code worked out along the way. If you are starting from scratch, read the topics in order.</p>
+</section>
+<section class="section" id="topics" aria-labelledby="topics-title">
+  <div class="section-head"><h2 id="topics-title">Contents</h2>
+    <div class="search-wrap"><label class="sr-only" for="question-search">Search topics and concepts</label><span class="search-icon" aria-hidden="true">⌕</span><input type="search" id="question-search" placeholder="Find a topic, e.g. GQA" autocomplete="off"></div>
+  </div>
+  <div class="notebook-index"><section class="index-row" data-search="Word representations From a row in an embedding table to a representation that depends on context. word2vec embeddings CBOW skip-gram RNN Bahdanau history vectors">
+      <span class="index-number">01</span>
+      <div class="index-content"><h3><a href="/under-the-hood/topics/representations/">Word representations</a></h3>
+        <p>From a row in an embedding table to a representation that depends on context.</p>
+        <div class="index-links"><a href="/under-the-hood/topics/representations/">Topic guide</a><a href="/under-the-hood/articles/foundations/">From word2vec to attention →</a></div>
+      </div>
+    </section><section class="index-row" data-search="Attention mechanisms Queries, keys, values, and the exact path through a small Llama-style decoder. attention query key value QKV softmax mask Llama RoPE RMSNorm SwiGLU NumPy">
+      <span class="index-number">02</span>
+      <div class="index-content"><h3><a href="/under-the-hood/topics/attention/">Attention mechanisms</a></h3>
+        <p>Queries, keys, values, and the exact path through a small Llama-style decoder.</p>
+        <div class="index-links"><a href="/under-the-hood/topics/attention/">Topic guide</a><a href="/under-the-hood/articles/attention/">A tiny Llama-style decoder →</a></div>
+      </div>
+    </section><section class="index-row" data-search="KV cache Follow prefill and decoding. See which tensors stay, which grow, and why. KV cache inference prefill decode memory causal chunk positions caching">
+      <span class="index-number">03</span>
+      <div class="index-content"><h3><a href="/under-the-hood/topics/kv-cache/">KV cache</a></h3>
+        <p>Follow prefill and decoding. See which tensors stay, which grow, and why.</p>
+        <div class="index-links"><a href="/under-the-hood/topics/kv-cache/">Topic guide</a><a href="/under-the-hood/articles/kv-cache/">Prefill, decode, and the KV cache →</a></div>
+      </div>
+    </section><section class="index-row" data-search="Modern architectures Understand GQA, latent memory, sparse attention, and efficient GPU kernels. modern GQA MQA MHA MLA DeepSeek FlashAttention NSA DSA CSA HCA RoPE">
+      <span class="index-number">04</span>
+      <div class="index-content"><h3><a href="/under-the-hood/topics/modern-attention/">Modern architectures</a></h3>
+        <p>Understand GQA, latent memory, sparse attention, and efficient GPU kernels.</p>
+        <div class="index-links"><a href="/under-the-hood/topics/modern-attention/">Topic guide</a><a href="/under-the-hood/articles/modern-attention/">GQA, MLA, and modern attention →</a></div>
+      </div>
+    </section></div>
+  <div id="no-results" class="no-results" hidden>No matching topic. Try “attention”, “vectors”, “GQA”, or “cache”.</div>
+  <div id="search-status" class="search-results" aria-live="polite"></div>
+</section>
+<section class="section notebook-columns" aria-label="History and experiments">
+  <div><h2>How we got here</h2>
+    <ol class="chronology">
+      <li><span class="year">2003–2013</span><p>Learned word representations and word2vec: words become reusable vectors. <a href="/under-the-hood/articles/foundations/">Start with embeddings</a>.</p></li>
+      <li><span class="year">2014–2015</span><p>Encoder–decoder attention learns to retrieve source states while generating a translation. <a href="/under-the-hood/articles/foundations/#sequence-bottleneck">The fixed-vector bottleneck</a>.</p></li>
+      <li><span class="year">2017</span><p>The Transformer makes attention a central operation in sequence modeling. <a href="/under-the-hood/articles/attention/">Work through Q, K, and V</a>.</p></li>
+      <li><span class="year">2019–2024</span><p>MQA, GQA, FlashAttention, and MLA address different costs of long-context inference. <a href="/under-the-hood/articles/modern-attention/">Compare the mechanisms</a>.</p></li>
+      <li><span class="year">2025–2026</span><p>Sparse selection, compressed context, and cross-layer reuse extend the design space. <a href="/under-the-hood/articles/modern-attention/#recent-research">Read the recent work</a>.</p></li>
+    </ol>
+  </div>
+  <div><h2>Code and experiments</h2>
+    <ul class="resource-list">
+      <li><a href="/under-the-hood/examples/tiny_llama.py" download>NumPy decoder</a><p>Two layers, four query heads, two KV heads. A complete forward pass you can read and run.</p></li>
+      <li><a href="/under-the-hood/articles/attention/#implementation-source">Line-by-line walkthrough</a><p>Follow the implementation alongside the shapes it computes.</p></li>
+      <li><a href="/under-the-hood/examples/trace.json" download>Measured attention and cache trace</a><p>The values behind the interactive figures, including numerical checks.</p></li>
+      <li><a href="/under-the-hood/articles/attention/#pretrained-lab">Pretrained TinyLlama experiment</a><p>A prepared GPU probe for the 1.1B checkpoint. The GPU run is still pending.</p></li>
+    </ul>
+    <div class="notebook-note"><p>The NumPy example uses deterministic random weights to make the mechanics easy to inspect. The pretrained experiment is separate.</p><p>Last updated 22 October 2026. Primary references are linked in each article.</p></div>
+  </div>
+</section>
+</main>
+<footer class="footer"><div class="shell">
+  <p>© 2026 Jeonghyeon Kim</p>
+  <div class="footer-links"><a href="/">About</a><a href="/under-the-hood/examples/tiny_llama.py" download>Code</a><a href="#top">Back to top</a></div>
+</div></footer>
+</body></html>

@@ -1,0 +1,177 @@
+<section id="attention-question">
+  <h2>What does attention actually calculate?</h2>
+  <p>Attention lets a token position collect information from other positions. It calculates a weight for each available position, then uses those weights to mix that position’s value vector into the result. A decoder applies this operation repeatedly as it builds the representation used to predict the next token. The useful question is therefore: <strong>which vectors are mixed, how are the weights calculated, and where does the result go?</strong></p>
+  <p>We will follow a small, complete decoder with two layers, a vocabulary of 32 token IDs, hidden width \(D=32\), four query heads, and two key/value heads. Each head has eight channels. These are deliberately small dimensions for inspecting the same kinds of operations used in a Llama-style decoder: RMSNorm, rotary position embeddings, grouped-query attention, SwiGLU, residual additions, and a vocabulary projection. <a href="#attn-ref-llama">[1]</a></p>
+  <p>The accompanying NumPy model uses deterministic random weights. It executes these mechanisms, but it has not learned language. A bright heatmap cell is a result of those demo weights; it does not establish that a trained language model associates two particular words. Token labels, when shown, are reading aids for a small vocabulary rather than the output of a pretrained tokenizer.</p>
+</section>
+
+<section id="attention-history">
+  <h2>From alignment to self-attention</h2>
+  <p><a href="https://arxiv.org/abs/1409.0473">Bahdanau and colleagues’ 2014 preprint</a>, presented at ICLR 2015, introduced an influential translation architecture in which a recurrent decoder forms a different weighted combination of source states at each output step. <a href="https://arxiv.org/abs/1508.04025">Luong and colleagues</a> expanded this design space in 2015, studying global and local attention alongside scoring functions such as dot products and learned bilinear comparisons.</p>
+  <p>The <a href="https://arxiv.org/abs/1706.03762">2017 Transformer</a> made attention the main mechanism for communication between positions, removing recurrence from its proposed encoder–decoder architecture. Its encoder uses self-attention, its decoder uses causal self-attention, and its decoder also reads encoder states through cross-attention. In self-attention, queries and K/V arise from the same sequence; in cross-attention, they arise from different sequences.</p>
+  <p>Our example follows the causal decoder branch with later additions: RMSNorm, SwiGLU, RoPE, and GQA. These components belong to the modern architecture being inspected, rather than to the original 2017 block.</p>
+</section>
+
+<section id="attention-states">
+  <h2>Start with a token ID, then distinguish its states</h2>
+  <p>An embedding table \(E\in\mathbb{R}^{N_{\mathrm{vocab}}\times D}\) maps an integer token ID to a row of numbers. For six input IDs, the lookup gives \(X^{(0)}\in\mathbb{R}^{1\times6\times32}\). Repeated occurrences of the same ID start with the same embedding. The table itself does not inspect the surrounding sentence.</p>
+  <p>After a decoder layer, the state at a position includes information collected from its permitted context. The same token can consequently have different states in different prefixes. At layer \(\ell\), attention projects that layer’s normalized input state—not a fresh lookup of the original token embedding. This distinction explains why higher-layer keys and values contain contextual information.</p>
+  <p>In the causal decoder studied here, position \(t\) can use positions \(0,\ldots,t\). Its final state predicts the token at \(t+1\). Processing all six known input positions in parallel does not reveal future tokens to earlier positions: the attention mask controls which positions can communicate. This is the causal decoder masking used in the original Transformer. <a href="#attn-ref-attention">[2]</a></p>
+</section>
+
+<section id="attention-projections">
+  <h2>Queries, keys, and values: learned roles and exact shapes</h2>
+  <p>Normalize the current state and apply three learned linear maps:</p>
+  <div class="equation">\[
+    Z=\operatorname{RMSNorm}(X),\qquad
+    Q=ZW_Q,\quad K=ZW_K,\quad V=ZW_V.
+  \]</div>
+  <p>A query participates in the comparison made by the receiving position. A key participates in the comparison for a candidate source position. A value carries the information that will be mixed. These are numerical roles in an operation; the vectors are learned features rather than literal questions, dictionary keys, or human-readable facts.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Object</th><th>Shape in this example</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(X,Z\)</td><td>\([1,6,32]\)</td><td>Batch, positions, hidden channels</td></tr>
+        <tr><td>\(W_Q\)</td><td>\([32,32]\)</td><td>Four query heads × eight channels</td></tr>
+        <tr><td>\(W_K,W_V\)</td><td>\([32,16]\) each</td><td>Two KV heads × eight channels</td></tr>
+        <tr><td>\(Q\), after head separation</td><td>\([1,4,6,8]\)</td><td>Batch, query heads, positions, channels</td></tr>
+        <tr><td>\(K,V\), after head separation</td><td>\([1,2,6,8]\) each</td><td>Batch, KV heads, positions, channels</td></tr>
+        <tr><td>Attention probabilities</td><td>\([1,4,6,6]\)</td><td>One distribution per head and query position</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Grouped-query attention, or GQA, allows multiple query heads to share one KV head. Here, query heads 0 and 1 use KV head 0; query heads 2 and 3 use KV head 1. They still produce different attention distributions because their queries differ. Ordinary multi-head attention uses as many KV heads as query heads; multi-query attention uses one KV head. <a href="#attn-ref-gqa">[3]</a></p>
+</section>
+
+<section id="attention-weights">
+  <h2>From a dot product to a mixture of values</h2>
+  <p>For query head \(h\), let \(g(h)=\lfloor h/2\rfloor\) select its shared KV head. With position information already applied to the queries and keys, the calculation is:</p>
+  <div class="equation">\[
+    S^{(h)}_{t,s}=\frac{q^{(h)}_t\cdot k^{(g(h))}_s}{\sqrt{8}}+M_{t,s},
+    \qquad
+    A^{(h)}_{t,s}=\frac{\exp S^{(h)}_{t,s}}
+    {\sum_{j=0}^{5}\exp S^{(h)}_{t,j}},
+    \qquad
+    o^{(h)}_t=\sum_{s=0}^{5}A^{(h)}_{t,s}v^{(g(h))}_s.
+  \]</div>
+  <p>The causal mask is zero when \(s\le t\), and negative infinity otherwise. A forbidden position therefore receives zero probability. Softmax runs over <em>key positions</em>, so every valid row sums to one. Division by \(\sqrt{d_h}\) controls the scale of dot products as head width changes. <a href="#attn-ref-attention">[2]</a></p>
+  <p>Consider the query at position 2. Only columns 0, 1, and 2 can contribute; columns 3–5 are unavailable. The output is a weighted sum of three eight-dimensional vectors. The first query position has only itself available, so its probability row must be \([1,0,0,0,0,0]\). These conclusions follow from the mask, regardless of the random weights.</p>
+  <p>An attention probability is specific to one layer, head, and receiving position. Reading it as the model’s overall explanation would ignore the value vectors, other heads, output projection, residual path, and later layers. The heatmap is most useful here as a way to inspect the computation.</p>
+</section>
+
+<section id="attention-rope">
+  <h2>How position enters: rotate queries and keys</h2>
+  <p>The demo uses rotary position embeddings, or RoPE. For each pair of channels, position \(p\) determines a rotation angle. Rotating both queries and keys makes their dot product depend on their relative positions. Values remain unrotated in this implementation. <a href="#attn-ref-rope">[4]</a></p>
+  <div class="equation">\[
+    \begin{bmatrix}a'\\b'\end{bmatrix}
+    =
+    \begin{bmatrix}
+      \cos(p\omega_i)&-\sin(p\omega_i)\\
+      \sin(p\omega_i)&\cos(p\omega_i)
+    \end{bmatrix}
+    \begin{bmatrix}a\\b\end{bmatrix},
+    \qquad \omega_i=10000^{-2i/8}.
+  \]</div>
+  <p>Our explicit convention pairs the first half of a head with its second half: channels \((0,4),(1,5),(2,6),(3,7)\). Other implementations use adjacent pairs with a corresponding weight layout. A pretrained checkpoint’s weights and its RoPE convention must agree. The six prompt positions are \(0,1,2,3,4,5\); this position counter will matter when we introduce a KV cache.</p>
+</section>
+
+<section id="attention-numpy">
+  <h2>Read the operation line by line in NumPy</h2>
+  <p>The following independent example uses arbitrary random weights to expose each transformation. It is a focused calculation, not a pretrained model or a copy of the interactive demo’s weight initialization. Run the three snippets in order. The complete two-layer model is in <a href="/under-the-hood/examples/tiny_llama.py" download>tiny_llama.py</a>.</p>
+  <pre><code class="language-python">import numpy as np
+
+B, T, D, Hq, Hkv, dh = 1, 6, 32, 4, 2, 8
+rng = np.random.default_rng(7)
+ids = np.array([[1, 2, 3, 4, 5, 6]])
+embedding = rng.normal(0, 0.1, (32, D))
+x = embedding[ids]                         # [1, 6, 32]
+z = x / np.sqrt(np.mean(x * x, axis=-1, keepdims=True) + 1e-6)
+
+wq = rng.normal(0, 0.1, (D, Hq * dh))
+wk = rng.normal(0, 0.1, (D, Hkv * dh))
+wv = rng.normal(0, 0.1, (D, Hkv * dh))
+wo = rng.normal(0, 0.1, (Hq * dh, D))
+q = (z @ wq).reshape(B, T, Hq, dh).transpose(0, 2, 1, 3)
+k = (z @ wk).reshape(B, T, Hkv, dh).transpose(0, 2, 1, 3)
+v = (z @ wv).reshape(B, T, Hkv, dh).transpose(0, 2, 1, 3)</code></pre>
+  <p>The lookup selects six embedding rows. Normalization averages over the last axis, independently for each token; its learned scale is implicitly all ones in this fragment. Each matrix multiplication creates all heads at once. <code>reshape</code> separates the head index from its channels, and <code>transpose</code> moves the head axis before the position axis. These two operations have different jobs: reshaping directly to <code>[B,H,T,dh]</code> would scramble the intended grouping.</p>
+  <pre><code class="language-python">positions = np.arange(T)
+
+def rope(a, positions):
+    half = a.shape[-1] // 2
+    frequencies = 10000.0 ** (-np.arange(half) / half)
+    angles = positions[:, None] * frequencies[None, :]
+    c = np.cos(angles)[None, None, :, :]
+    s = np.sin(angles)[None, None, :, :]
+    left, right = a[..., :half], a[..., half:]
+    return np.concatenate(
+        [left * c - right * s, left * s + right * c], axis=-1
+    )
+
+q, k = rope(q, positions), rope(k, positions)</code></pre>
+  <p>The frequency vector has four entries. Broadcasting supplies one set of angles for each position to every batch and head. The last line rotates Q and K using the same positions, leaving V untouched.</p>
+  <pre><code class="language-python">groups = Hq // Hkv
+qg = q.reshape(B, Hkv, groups, T, dh)
+scores = np.einsum("bgrtd,bgsd-&gt;bgrts", qg, k) / np.sqrt(dh)
+allowed = positions[None, :] &lt;= positions[:, None]
+scores = np.where(allowed[None, None, None, :, :], scores, -np.inf)
+scores = scores - np.max(scores, axis=-1, keepdims=True)
+weights = np.exp(scores)
+weights = weights / np.sum(weights, axis=-1, keepdims=True)
+heads = np.einsum("bgrts,bgsd-&gt;bgrtd", weights, v)
+heads = heads.reshape(B, Hq, T, dh)
+merged = heads.transpose(0, 2, 1, 3).reshape(B, T, Hq * dh)
+attention_update = merged @ wo             # [1, 6, 32]</code></pre>
+  <p>The first <code>einsum</code> sums over channels \(d\), producing one score for every query/key pair. Grouping queries lets us share K/V without storing repeated copies. The mask compares key positions along columns with query positions along rows. Subtracting the row maximum stabilizes softmax without changing its result. The second <code>einsum</code> sums over source positions \(s\). Finally, merging four eight-channel outputs gives 32 channels, and \(W_O\) learns how to mix them back into the residual stream.</p>
+</section>
+
+<section id="attention-block">
+  <h2>Place attention inside the complete decoder block</h2>
+  <p>Attention produces an update with the same shape as its input. A residual addition incorporates that update, and a second sublayer processes each position’s channels:</p>
+  <div class="equation">\[
+    U=X+\operatorname{Attention}(\operatorname{RMSNorm}_1(X)),
+    \qquad
+    X_{\mathrm{next}}=U+\operatorname{SwiGLU}(\operatorname{RMSNorm}_2(U)).
+  \]</div>
+  <p>RMSNorm divides each token vector by its root mean square, with a small numerical stabilizer, then applies a learned channel scale. It does not subtract the channel mean. Each normalization has its own scale parameters. <a href="#attn-ref-rmsnorm">[5]</a></p>
+  <p>The feed-forward sublayer uses a gated product:</p>
+  <div class="equation">\[
+    \operatorname{SwiGLU}(Z)=
+    \bigl(\operatorname{SiLU}(ZW_{\mathrm{gate}})
+    \odot ZW_{\mathrm{up}}\bigr)W_{\mathrm{down}},
+    \qquad \operatorname{SiLU}(a)=a\,\sigma(a).
+  \]</div>
+  <p>In the tiny model, both expansion matrices have shape \([32,96]\), and the contraction matrix has shape \([96,32]\). Multiplication \(\odot\) is elementwise: one branch gates the other. This sublayer mixes channels separately at each position; attention is where positions exchange information. SwiGLU is one of the gated feed-forward variants studied by Shazeer. <a href="#attn-ref-swiglu">[6]</a></p>
+  <p>After two blocks, a final RMSNorm and vocabulary projection produce logits with shape \([1,6,32]\). The demo ties that final projection to \(E^\top\). The final 32 counts vocabulary entries; its equality to the hidden width is a demo choice. The last position’s logits define the next-token distribution. Selecting a token is a separate step from computing attention. Meta’s reference implementation provides the full normalization–attention–residual–feed-forward ordering. <a href="#attn-ref-llama">[1]</a></p>
+</section>
+
+<section id="attention-lab">
+  <h2>Inspect one layer and head</h2>
+  <p>Use the controls to inspect the tiny model’s actual attention probabilities. Check the forbidden upper triangle, compare two query heads sharing a KV head, and follow one row across its permitted sources. The values come from the demo computation; they illustrate mechanics rather than learned linguistic behavior.</p>
+  <div data-widget="attention-lab"></div>
+</section>
+
+<section id="attention-failure-modes">
+  <h2>What to check when your implementation disagrees</h2>
+  <ul>
+    <li><strong>Wrong axes:</strong> inspect the shapes before and after every reshape, transpose, and matrix multiplication.</li>
+    <li><strong>Wrong softmax axis:</strong> normalize over available keys. Normalizing over heads or queries changes the operation.</li>
+    <li><strong>Mask after softmax:</strong> this removes probability mass without renormalizing. Apply the mask to scores first.</li>
+    <li><strong>Missing self-attention:</strong> the current position is allowed. A strict “earlier only” mask leaves the first row empty.</li>
+    <li><strong>Incompatible RoPE pairing:</strong> use the convention expected by the projection weights and keep position IDs consistent.</li>
+    <li><strong>Untrained semantic claims:</strong> a working forward pass verifies arithmetic and shape handling; language competence requires trained weights.</li>
+  </ul>
+  <p>Once these operations are clear, the next question becomes precise: which of them must be repeated when one token is appended? That is the starting point for the KV-cache article.</p>
+</section>
+
+<section id="attention-references">
+  <h2>Primary references</h2>
+  <ol class="references">
+    <li id="attn-ref-llama"><a href="https://github.com/meta-llama/llama3/blob/main/llama/model.py" target="_blank" rel="noopener noreferrer">Meta: Llama 3 reference model implementation.</a> Full decoder structure; the tiny implementation is independently written and uses reduced dimensions.</li>
+    <li id="attn-ref-attention"><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Vaswani et al. (2017), Attention Is All You Need.</a> Scaled dot-product attention, multiple heads, and causal masking.</li>
+    <li id="attn-ref-gqa"><a href="https://aclanthology.org/2023.emnlp-main.298/" target="_blank" rel="noopener noreferrer">Ainslie et al. (2023), GQA.</a> Sharing key/value heads across groups of query heads.</li>
+    <li id="attn-ref-rope"><a href="https://arxiv.org/abs/2104.09864" target="_blank" rel="noopener noreferrer">Su et al., RoFormer: Enhanced Transformer with Rotary Position Embedding.</a> Position-dependent rotations of attention vectors.</li>
+    <li id="attn-ref-rmsnorm"><a href="https://arxiv.org/abs/1910.07467" target="_blank" rel="noopener noreferrer">Zhang and Sennrich (2019), Root Mean Square Layer Normalization.</a> RMS-based normalization.</li>
+    <li id="attn-ref-swiglu"><a href="https://arxiv.org/abs/2002.05202" target="_blank" rel="noopener noreferrer">Shazeer (2020), GLU Variants Improve Transformer.</a> Gated feed-forward networks, including SwiGLU.</li>
+  </ol>
+</section>

@@ -1,0 +1,136 @@
+<section id="cache-question">
+  <h2>Why process the same prefix again?</h2>
+  <p>After reading a prompt, a causal language model predicts one next token. That token then becomes an input for the following prediction. Re-running the entire growing prefix would repeat work for positions the model has already processed. A KV cache retains the earlier <strong>key and value vectors at each attention layer</strong>, allowing the next forward pass to process only newly supplied positions. The new queries still attend to the retained context. <a href="#cache-ref-hf">[1]</a></p>
+  <p>This article follows the same two-layer NumPy decoder as the attention article: hidden width 32, four query heads, two KV heads, eight channels per head, and float64 arrays. Its weights are random and fixed. The point is to inspect a concrete inference mechanism and compare calculations, rather than evaluate language quality or GPU performance.</p>
+</section>
+
+<section id="cache-validity">
+  <h2>Why old keys and values stay valid</h2>
+  <p>For fixed parameters and positions, the state at position \(t\) depends only on the prefix ending at \(t\). Appending a token cannot change it: the causal mask prevents earlier positions from using that future information. The argument holds through every layer. If an earlier layer’s states are unchanged, its projections and the later layer’s permitted attention inputs remain unchanged too. <a href="#cache-ref-attention">[2]</a></p>
+  <p>Consequently, a layer can retain its old keys and values and calculate only the new ones. For each query head, use its group’s K/V; the formula below suppresses batch and head indices:</p>
+  <div class="equation">\[
+    K_{\mathrm{all}}=[K_{\mathrm{past}};K_{\mathrm{new}}],
+    \qquad
+    V_{\mathrm{all}}=[V_{\mathrm{past}};V_{\mathrm{new}}],
+    \qquad
+    O_{\mathrm{new}}=
+    \operatorname{softmax}\!\left(
+      \frac{Q_{\mathrm{new}}K_{\mathrm{all}}^\top}{\sqrt{d_h}}+M
+    \right)V_{\mathrm{all}}.
+  \]</div>
+  <p>There is a separate cache for each layer because the projected states differ by layer. A cache entry is also specific to the prefix, weights, position convention, and attention policy that produced it. Two occurrences of the same word generally cannot share a higher-layer entry merely because their token IDs match.</p>
+  <p><strong>Why not retain Q?</strong> The new output rows use new queries. Old queries would reconstruct old output rows, which are already finished. New attention probabilities are still computed, because a new query compares differently with the cached keys. Caching does not freeze the model’s attention distribution. <a href="#cache-ref-hf">[1]</a></p>
+</section>
+
+<section id="cache-timing">
+  <h2>Prefill and decoding: the exact timing</h2>
+  <p>Suppose six prompt tokens occupy positions 0–5. <em>Prefill</em> processes those known tokens, fills all layers’ caches, and produces the distribution for token 7. A chosen token is not in the cache until a later forward pass processes it.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Forward pass</th><th>New input positions</th><th>Cache length afterward</th><th>Last output predicts</th></tr></thead>
+      <tbody>
+        <tr><td>Prefill</td><td>0, 1, 2, 3, 4, 5</td><td>6</td><td>Token 7, at position 6</td></tr>
+        <tr><td>Decode 1</td><td>6</td><td>7</td><td>Token 8, at position 7</td></tr>
+        <tr><td>Decode 2</td><td>7</td><td>8</td><td>Token 9, at position 8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Token numbering in the final column starts at one; position IDs start at zero. Keeping those conventions explicit prevents a frequent off-by-one error. Every newly processed token still traverses both complete decoder blocks, including their feed-forward sublayers. Only earlier positions avoid another full traversal.</p>
+</section>
+
+<section id="cache-shapes">
+  <h2>What is actually stored?</h2>
+  <p>After the six-token prefill, each layer stores K and V with shape \([1,2,6,8]\): batch, KV heads, positions, channels. Queries have four heads, but the persistent cache keeps the compact two-head representation. GQA shares these vectors during attention. Physically duplicating them into four cached heads would waste the intended storage saving. <a href="#cache-ref-gqa">[3]</a></p>
+  <p>The demo stores keys <em>after</em> RoPE and values without rotation. When processing position 6, rotate its new query and key with position 6. Keep the cached keys’ existing rotations. Rotating old keys again, or resetting the new position to zero, changes the comparisons. Meta’s reference code similarly applies RoPE before writing keys into its cache. <a href="#cache-ref-llama">[4]</a></p>
+  <p>The cache also records position IDs for explicit masking. K/V arrays dominate storage in a large model, but position metadata, allocation capacity, and temporary arrays must be distinguished when reporting total memory.</p>
+</section>
+
+<section id="cache-offset-mask">
+  <h2>The mask must know where the new chunk starts</h2>
+  <p>With six cached tokens and one new token, the new query is at position 6 and all seven keys are allowed. A triangular mask constructed for a local \(1\times7\) matrix can incorrectly allow only column 0. The comparison must use actual query and key positions.</p>
+  <p>Now append a two-token chunk at positions 6 and 7. The first query can see keys 0–6, and the second can see keys 0–7. Chunked input is useful for checking causality even when a generation loop usually supplies one token at a time.</p>
+  <pre><code class="language-python">import numpy as np
+
+past_length, new_length = 6, 2
+query_positions = np.arange(past_length, past_length + new_length)
+key_positions = np.arange(past_length + new_length)
+allowed = key_positions[None, :] &lt;= query_positions[:, None]
+# Shape: [2, 8].
+# First row allows columns 0..6; second allows columns 0..7.</code></pre>
+  <p>Line 3 constructs absolute new positions. Line 4 covers cached and new keys. Line 5 broadcasts them into a query-by-key comparison. Padding or a sliding window would require additional constraints; this example uses an unpadded contiguous sequence and full causal attention.</p>
+</section>
+
+<section id="cache-numpy">
+  <h2>Follow one layer’s cache update</h2>
+  <p>The focused fragment below assumes the current layer has projected only the new input states, giving <code>q_new</code>, <code>k_new</code>, and <code>v_new</code>. It uses the executable example’s <code>apply_rope</code> and <code>grouped_attention</code> helpers. Cache concatenation is on axis 2, the position axis in \([B,H,T,d_h]\).</p>
+  <pre><code class="language-python">from tiny_llama import apply_rope, grouped_attention
+
+past_length = past_k.shape[2]
+new_length = q_new.shape[2]
+positions = np.arange(past_length, past_length + new_length)
+q_new = apply_rope(q_new, positions, theta=10000.0)
+k_new = apply_rope(k_new, positions, theta=10000.0)
+
+all_k = np.concatenate([past_k, k_new], axis=2)
+all_v = np.concatenate([past_v, v_new], axis=2)
+key_positions = np.arange(past_length + new_length)
+new_heads = grouped_attention(
+    q_new, all_k, all_v,
+    query_positions=positions, key_positions=key_positions,
+)
+# Retain all_k and all_v for this layer's next call.
+# Merge new_heads, apply the output projection, then continue the block.</code></pre>
+  <p>The first two lengths separate already processed positions from new work. Only new Q/K receive rotations. Concatenation preserves compact KV heads. The attention helper uses the absolute-position mask and returns outputs for new queries only. Their output projection, residual addition, normalization, and SwiGLU computation then proceed normally. Repeating this process at each layer produces the next-token logits.</p>
+  <p><code>concatenate</code> is clear for teaching, but repeatedly copying growing arrays is inefficient. Production implementations can preallocate storage or manage it in blocks. That changes storage management while preserving the logical collection of past keys and values. <a href="#cache-ref-paged">[5]</a></p>
+</section>
+
+<section id="cache-memory">
+  <h2>Calculate the memory instead of guessing</h2>
+  <p>For uniform layers and full attention, the logical K/V payload is:</p>
+  <div class="equation">\[
+    \text{bytes}=2\,L\,B\,H_{\mathrm{KV}}\,T\,d_h\,b.
+  \]</div>
+  <p>The leading 2 counts K and V; \(L\) is layers, \(B\) is batch size, \(T\) is cached positions, and \(b\) is bytes per scalar. For our model:</p>
+  <div class="equation">\[
+    2\times2\times1\times2\times6\times8\times8
+    =3072\ \text{bytes}=3\ \text{KiB}.
+  \]</div>
+  <p>This is an analytical calculation for the K/V arrays, excluding position metadata, model weights, activations, and allocator overhead. Each additional cached token adds 512 payload bytes across both layers. Using four KV heads would double this payload; changing float64 to a two-byte format would reduce it by a factor of four, before considering numerical differences. The tiny model uses float64 to make numerical comparisons easy to inspect.</p>
+  <div data-widget="cache-lab"></div>
+</section>
+
+<section id="cache-equivalence">
+  <h2>Compare cached and full-prefix calculations</h2>
+  <p>Fix the supplied tokens and compare full-prefix and cached logits. With <a href="/under-the-hood/examples/tiny_llama.py" download>tiny_llama.py</a> in your working directory, this checks one six-token prefill followed by a single new token:</p>
+  <pre><code class="language-python">import numpy as np
+from tiny_llama import TinyLlama
+
+model = TinyLlama(seed=7)
+ids = np.array([[1, 2, 3, 4, 5, 6, 7]])
+full = model.forward(ids).logits
+prefix = model.forward(ids[:, :6], use_cache=True)
+step = model.forward(ids[:, 6:], cache=prefix.cache, use_cache=True)
+error = np.max(np.abs(step.logits[:, -1] - full[:, -1]))
+print("maximum absolute error:", error)
+np.testing.assert_allclose(step.logits[:, -1], full[:, -1],
+                           rtol=1e-10, atol=1e-10)</code></pre>
+  <p>The same model instance ensures identical weights. The prefix call supplies cached context; the next call supplies only the seventh token. Compare matching output positions, since the cached call returns just one row. The full example’s <code>--verify</code> also tests multi-token chunks, which can expose an incorrect offset mask.</p>
+  <p>These schedules should be equivalent mathematically. Floating-point operation order can produce small differences; the code measures them rather than assuming exact equality. Comparing sampled strings is less diagnostic: different sampling decisions create different later prefixes. Check identical supplied tokens first.</p>
+</section>
+
+<section id="cache-limits">
+  <h2>What caching saves, and what remains</h2>
+  <p>At a context length of \(T\), one new query still compares with \(T\) keys and mixes \(T\) values. The attention work for one decode step grows linearly with context length; summing over a growing generated sequence remains quadratic in its length. Prefill still has pairwise attention work across the prompt. Cache storage also grows with context, and reading it can become a serving bottleneck. <a href="#cache-ref-paged">[5]</a></p>
+  <p>Exact reuse requires compatible weights, prefix states, positions, and attention rules. Editing an earlier token invalidates dependent cached states; changing model parameters invalidates the old cache. Quantization, compression, or eviction can change numerical results and require their own evaluation. A bidirectional encoder generally cannot preserve earlier states unchanged when new visible context is appended. Caching is therefore an inference strategy whose validity follows from the model’s dependencies.</p>
+</section>
+
+<section id="cache-references">
+  <h2>Primary references</h2>
+  <ol class="references">
+    <li id="cache-ref-hf"><a href="https://huggingface.co/docs/transformers/cache_explanation" target="_blank" rel="noopener noreferrer">Hugging Face Transformers: How caching works.</a> Per-layer K/V reuse and cache updates.</li>
+    <li id="cache-ref-attention"><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Vaswani et al. (2017), Attention Is All You Need.</a> Causal decoder dependencies.</li>
+    <li id="cache-ref-gqa"><a href="https://aclanthology.org/2023.emnlp-main.298/" target="_blank" rel="noopener noreferrer">Ainslie et al. (2023), GQA.</a> Compact shared key/value heads.</li>
+    <li id="cache-ref-llama"><a href="https://github.com/meta-llama/llama3/blob/main/llama/model.py" target="_blank" rel="noopener noreferrer">Meta: Llama 3 reference model implementation.</a> Position-aware RoPE, cache writes, and subsequent attention.</li>
+    <li id="cache-ref-paged"><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener noreferrer">Kwon et al. (2023), Efficient Memory Management for Large Language Model Serving with PagedAttention.</a> KV-cache memory management during serving.</li>
+  </ol>
+</section>

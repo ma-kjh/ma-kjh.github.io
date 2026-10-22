@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before attention: how words become vectors · Jeonghyeon Kim</title>
+<meta name="description" content="Build an embedding table, calculate a complete skip-gram training step, and discover why a decoder needs more than one fixed vector.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://ma-kjh.github.io/under-the-hood/articles/foundations/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Before attention: how words become vectors">
+<meta property="og:description" content="Build an embedding table, calculate a complete skip-gram training step, and discover why a decoder needs more than one fixed vector.">
+<meta property="og:url" content="https://ma-kjh.github.io/under-the-hood/articles/foundations/">
+<link rel="icon" href="/under-the-hood/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/under-the-hood/assets/research.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="/under-the-hood/assets/research.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Before attention: how words become vectors", "description": "Build an embedding table, calculate a complete skip-gram training step, and discover why a decoder needs more than one fixed vector.", "url": "https://ma-kjh.github.io/under-the-hood/articles/foundations/", "author": {"@type": "Person", "name": "Jeonghyeon Kim", "url": "https://ma-kjh.github.io"}, "inLanguage": "en", "dateModified": "2026-10-22"}</script>
+</head><body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="shell">
+  <a class="brand" href="/">Jeonghyeon Kim</a>
+  <button class="menu-button" data-menu aria-expanded="false" aria-controls="site-nav">Menu</button>
+  <nav class="topnav" id="site-nav" aria-label="Main navigation">
+    <a class="active" href="/under-the-hood/">Under the Hood</a>
+    <a href="/publications">Publications</a>
+    <a href="https://github.com/ma-kjh/ma-kjh.github.io/tree/main/under-the-hood">GitHub</a>
+  </nav>
+</div></header>
+<div class="progress" id="reading-progress" aria-hidden="true"></div>
+<main id="main" class="article-shell">
+  <header class="article-top"><div class="breadcrumbs"><a href="/under-the-hood/">Under the Hood</a><span>/</span><a href="/under-the-hood/topics/representations/">Word representations</a></div>
+    <div class="eyebrow">01 / Foundations</div><h1>Before attention: how words become vectors</h1><p class="article-deck">Build an embedding table, calculate a complete skip-gram training step, and discover why a decoder needs more than one fixed vector.</p>
+    <div class="article-meta"><span class="author">Jeonghyeon Kim</span><time datetime="2026-10-22">22 October 2026</time><span>14 min read</span></div>
+  </header>
+  <div class="article-grid"><aside class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ol class="toc-list"><li><a href="#heading-the-starting-point">1. Start with the representation</a></li><li><a href="#heading-one-hot-and-lookup">2. A one-hot vector selects a trainable row</a></li><li><a href="#heading-prediction-builds-embeddings">3. Word2vec learns from neighboring words</a></li><li><a href="#heading-numpy-full-softmax">4. Calculate one complete training step</a></li><li><a href="#heading-negative-sampling">5. Negative sampling changes the objective</a></li><li><a href="#heading-static-and-contextual">6. One word type can have several meanings</a></li><li><a href="#heading-sequence-bottleneck">7. From word vectors to a whole sequence</a></li><li><a href="#heading-bridge-to-attention">8. The next question: which information is useful now?</a></li><li><a href="#heading-references">References</a></li></ol>
+    <div class="toc-tools"><a href="/under-the-hood/examples/tiny_llama.py" download>↓ Download NumPy source</a><a href="/under-the-hood/examples/trace.json" download>↓ Download measured trace</a><a href="https://github.com/ma-kjh/ma-kjh.github.io/tree/main/under-the-hood">↗ View on GitHub</a></div></aside>
+    <article class="article-body"><details class="mobile-toc"><summary>On this page</summary><ol class="toc-list"><li><a href="#heading-the-starting-point">1. Start with the representation</a></li><li><a href="#heading-one-hot-and-lookup">2. A one-hot vector selects a trainable row</a></li><li><a href="#heading-prediction-builds-embeddings">3. Word2vec learns from neighboring words</a></li><li><a href="#heading-numpy-full-softmax">4. Calculate one complete training step</a></li><li><a href="#heading-negative-sampling">5. Negative sampling changes the objective</a></li><li><a href="#heading-static-and-contextual">6. One word type can have several meanings</a></li><li><a href="#heading-sequence-bottleneck">7. From word vectors to a whole sequence</a></li><li><a href="#heading-bridge-to-attention">8. The next question: which information is useful now?</a></li><li><a href="#heading-references">References</a></li></ol></details>
+    <section id="the-starting-point">
+  <h2 id="heading-the-starting-point">1. Start with the representation</h2>
+  <p>Before asking how attention connects tokens, ask what a token looks like to a neural network. A word such as <em>cat</em> must become a numerical object. The important questions are how that object is learned, what information it contains, and whether its meaning changes with the sentence.</p>
+  <p>This lesson follows the path from a vocabulary index to a learned word vector, then to a representation that depends on context. Word2vec is a useful starting point because its prediction task is small enough to calculate by hand. It belongs to the history of representation learning; attention enters when we need a flexible way for positions to exchange information.</p>
+  <p>Learned word representations predate word2vec. Bengio and colleagues jointly trained distributed word representations and a neural language model in 2003. Their central motivation was generalization: similar representations can help a model handle word combinations it has never seen. <a href="#ref-bengio">[1]</a></p>
+</section>
+
+<section id="one-hot-and-lookup">
+  <h2 id="heading-one-hot-and-lookup">2. A one-hot vector selects a trainable row</h2>
+  <p>Use the toy vocabulary <code>["the", "cat", "drinks", "milk"]</code>. A one-hot encoding of <em>cat</em> is \(x_{\mathrm{cat}}=[0,1,0,0]\). It identifies the word, but its geometry supplies no semantic relationship: any two different one-hot vectors have dot product zero and Euclidean distance \(\sqrt{2}\).</p>
+  <p>Now introduce an embedding table. With vocabulary size \(V\) and embedding dimension \(d\), the shapes are:</p>
+  <table>
+    <thead><tr><th>Object</th><th>Shape</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>\(x_w\)</td><td>\(1\times V\)</td><td>One-hot row for word \(w\)</td></tr>
+      <tr><td>\(E_{\mathrm{in}}\)</td><td>\(V\times d\)</td><td>Trainable input embedding table</td></tr>
+      <tr><td>\(v_w=x_wE_{\mathrm{in}}\)</td><td>\(1\times d\)</td><td>The selected embedding row</td></tr>
+    </tbody>
+  </table>
+  <p>Matrix multiplication here is simply a lookup: \(x_wE_{\mathrm{in}}=E_{\mathrm{in}}[w]\). Implementations can retrieve the row directly instead of constructing the one-hot vector. The vocabulary index is fixed; the row values are learned. A compact vector becomes useful through its training objective, rather than through an inherent meaning assigned to each coordinate.</p>
+  <p>A model that takes one-hot inputs can therefore learn relationships through its embedding table. The limitation concerns the original one-hot geometry, not everything a model can learn from it.</p>
+</section>
+
+<section id="prediction-builds-embeddings">
+  <h2 id="heading-prediction-builds-embeddings">3. Word2vec learns from neighboring words</h2>
+  <p>Mikolov and colleagues proposed two efficient architectures in 2013. <strong>Continuous bag of words (CBOW)</strong> combines surrounding word vectors to predict a target word. <strong>Skip-gram</strong> uses a center word to predict nearby words. In the sentence “the cat drinks milk,” a context window of one produces the skip-gram pairs <code>(cat, the)</code> and <code>(cat, drinks)</code>. <a href="#ref-word2vec">[2]</a></p>
+  <p>The learning signal comes from observed co-occurrence. Across many examples, words with similar predictive relationships can acquire related representations. Similarity is consequently shaped by the corpus and objective; it is not a guarantee that nearby words are synonyms.</p>
+  <p>The full-softmax version uses two tables: an input vector \(v_c\) for the center word and an output vector \(u_o\) for a candidate context word. Their dot product supplies a compatibility score. In the dot-product formulas below, individual retrieved embeddings are written as column vectors. The conditional probability and single-pair loss are: <a href="#ref-skipgram">[3]</a></p>
+  \[
+    p(o\mid c)=
+    \frac{\exp(u_o^\top v_c)}
+    {\sum_{w\in\mathcal V}\exp(u_w^\top v_c)},
+    \qquad
+    \mathcal L(c,o)=-\log p(o\mid c).
+  \]
+  <p>Both tables contain parameters that training can change. Using two tables lets a word play distinct roles as a predictor and as a prediction target. In the following NumPy calculation, each stored row is treated as a one-dimensional vector.</p>
+</section>
+
+<section id="numpy-full-softmax">
+  <h2 id="heading-numpy-full-softmax">4. Calculate one complete training step</h2>
+  <p>This standalone CPU example uses four words and two-dimensional vectors. <strong>Every starting coordinate is illustrative.</strong> These numbers are chosen to make the arithmetic visible; they are not measurements from a trained language model.</p>
+  <pre><code class="language-python">import numpy as np
+
+vocabulary = ["the", "cat", "drinks", "milk"]
+word_to_id = {word: i for i, word in enumerate(vocabulary)}
+
+E_in = np.array([
+    [0.1, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]
+])
+E_out = np.array([
+    [0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]
+])
+
+def softmax(scores):
+    shifted = scores - scores.max()
+    weights = np.exp(shifted)
+    return weights / weights.sum()
+
+center_id = word_to_id["cat"]
+context_id = word_to_id["drinks"]
+v = E_in[center_id].copy()
+
+logits = E_out @ v
+probabilities = softmax(logits)
+loss = -np.log(probabilities[context_id])
+print("logits:", logits)
+print("probabilities:", np.round(probabilities, 6))
+print(f"loss before: {loss:.6f}")
+
+grad_logits = probabilities.copy()
+grad_logits[context_id] -= 1.0
+grad_v = E_out.T @ grad_logits
+grad_out = np.outer(grad_logits, v)
+
+learning_rate = 0.1
+E_in[center_id] -= learning_rate * grad_v
+E_out -= learning_rate * grad_out
+
+new_probabilities = softmax(E_out @ E_in[center_id])
+new_loss = -np.log(new_probabilities[context_id])
+print("new center vector:", np.round(E_in[center_id], 6))
+print(f"loss after: {new_loss:.6f}")</code></pre>
+  <p>Running this example produces:</p>
+  <pre><code class="language-text">logits: [0. 1. 0. 1.]
+probabilities: [0.134471 0.365529 0.134471 0.365529]
+loss before: 2.006409
+new center vector: [0.926894 0.05    ]
+loss after: 1.835051</code></pre>
+  <p>Read the calculation in six steps:</p>
+  <ol>
+    <li><strong>Select the center vector.</strong> <code>E_in[center_id]</code> retrieves the row for <em>cat</em>, initially \([1,0]\). The copy preserves that forward-pass value while parameters are updated later.</li>
+    <li><strong>Score every candidate.</strong> <code>E_out @ v</code> multiplies a \(4\times2\) table by a length-2 vector. The resulting four logits correspond to the vocabulary order.</li>
+    <li><strong>Normalize the scores.</strong> Softmax produces a probability distribution. Subtracting the largest score leaves the mathematical probabilities unchanged and improves numerical stability.</li>
+    <li><strong>Measure the target error.</strong> The observed context word is <em>drinks</em>. Its probability is approximately \(0.134471\), so the loss is \(-\log(0.134471)\approx2.006409\).</li>
+    <li><strong>Differentiate the loss.</strong> For softmax cross-entropy, the logit gradient is \(p-y\), where \(y\) is the target one-hot vector. The matrix product and outer product propagate that gradient to the two embedding tables.</li>
+    <li><strong>Move the parameters.</strong> Subtracting the gradients changes the center row and the output rows. We compute both gradients before changing either table, so they refer to the same forward pass.</li>
+  </ol>
+  <p>The lower loss verifies this particular update on this particular pair. It does not establish useful language representations. That requires many examples, appropriate optimization, and evaluation beyond a single training pair.</p>
+</section>
+
+<section id="negative-sampling">
+  <h2 id="heading-negative-sampling">5. Negative sampling changes the objective</h2>
+  <p>Full softmax scores the entire output vocabulary for every training pair. The later 2013 word2vec paper introduced negative sampling as an efficient alternative: distinguish an observed pair from pairs formed using sampled noise words. For negatives \(n_1,\ldots,n_k\), a sampled loss is: <a href="#ref-skipgram">[3]</a></p>
+  \[
+    \mathcal L_{\mathrm{NEG}}
+    =-\log\sigma(u_o^\top v_c)
+     -\sum_{j=1}^{k}\log\sigma(-u_{n_j}^\top v_c),
+    \qquad \sigma(z)=\frac{1}{1+\exp(-z)}.
+  \]
+  <p>This objective rewards a high score for the observed pair and low scores for sampled pairs. It trains binary discrimination problems. Its sigmoid scores do not directly constitute a normalized probability distribution over all vocabulary words. Keep that distinction when comparing implementations: full softmax and negative sampling are different objectives, even though both can learn useful embeddings.</p>
+</section>
+
+<section id="static-and-contextual">
+  <h2 id="heading-static-and-contextual">6. One word type can have several meanings</h2>
+  <p>Consider “She sat by the river bank” and “She called the central bank.” A standard trained word2vec table retrieves the same row for <em>bank</em> in both sentences. The training used contexts, but the final lookup depends on the word identity alone.</p>
+  <p><strong>Static</strong> describes this context-independent lookup; it does not mean the vectors were never trained. A contextual model instead computes a representation such as \(h_i=f(x_1,\ldots,x_T,i)\), which can vary with the surrounding sequence. For a causal model, the available context is limited to positions up to \(i\).</p>
+  <p>Contextualization also does not require attention. ELMo used internal states of a bidirectional language model to produce context-sensitive representations. BERT later used bidirectional Transformer representations. These are different architectures pursuing a related representational goal. <a href="#ref-elmo">[4]</a> <a href="#ref-bert">[5]</a></p>
+  <p>Even a contextual model may begin with a static token-embedding lookup. Subsequent layers transform that initial vector using the available context. The input embedding and the final contextual representation are different stages of the computation.</p>
+</section>
+
+<section id="sequence-bottleneck">
+  <h2 id="heading-sequence-bottleneck">7. From word vectors to a whole sequence</h2>
+  <p>An RNN processes embeddings sequentially, updating a hidden state:</p>
+  \[
+    h_t=f(h_{t-1},e_t).
+  \]
+  <p>The state can incorporate information from the preceding tokens. In early encoder–decoder designs, the encoder represented the input sequence with a fixed-size state, and a decoder used that representation to generate an output sequence. Cho and colleagues described this structure in their June 2014 encoder–decoder paper. <a href="#ref-cho">[6]</a></p>
+  <p>The potential bottleneck is easy to picture in translation: all source information must remain accessible through that fixed-size representation as the decoder produces different target words. Longer or more complicated inputs may increase the demand on it. This is a capacity and optimization concern, not a theorem that a fixed-size vector must fail on every long sequence.</p>
+  <p>Bahdanau and colleagues made the bottleneck explicit and let the decoder use different weighted combinations of encoder states at different output steps. Their preprint appeared in September 2014 and was presented at ICLR 2015. <a href="#ref-bahdanau">[7]</a></p>
+</section>
+
+<section id="bridge-to-attention">
+  <h2 id="heading-bridge-to-attention">8. The next question: which information is useful now?</h2>
+  <p>Suppose the encoder keeps states \(h_1,\ldots,h_T\). Attention calculates relevance scores for the current decoder step, normalizes them into weights, and forms a context vector:</p>
+  \[
+    \alpha_{t,j}
+    =\frac{\exp(e_{t,j})}{\sum_{m=1}^{T}\exp(e_{t,m})},
+    \qquad
+    c_t=\sum_{j=1}^{T}\alpha_{t,j}h_j.
+  \]
+  <p>The decoder can retrieve a different mixture at every step. In Bahdanau attention, a learned alignment function uses the decoder state and each encoder state to obtain the scores. <a href="#ref-bahdanau">[7]</a></p>
+  <p>This establishes the next lesson’s central problem: how to compute relevance, and how to turn the resulting weights into useful information. From there, query–key–value notation, self-attention, multi-head attention, and efficient attention architectures become concrete extensions of operations we can inspect.</p>
+  <details>
+    <summary>Check your understanding</summary>
+    <p>Why does training word2vec on surrounding words still produce a static embedding for <em>bank</em>?</p>
+    <p><strong>Answer:</strong> Training changes a shared table using many contexts. At lookup time, the word identity selects one table row, with no sentence-dependent computation. A contextual representation requires an additional computation that uses the current sequence.</p>
+  </details>
+</section>
+
+<section id="references">
+  <h2 id="heading-references">References</h2>
+  <ol>
+    <li id="ref-bengio">Bengio et al. (2003). <a href="https://www.jmlr.org/papers/v3/bengio03a.html">A Neural Probabilistic Language Model.</a></li>
+    <li id="ref-word2vec">Mikolov et al. (2013). <a href="https://arxiv.org/abs/1301.3781">Efficient Estimation of Word Representations in Vector Space.</a></li>
+    <li id="ref-skipgram">Mikolov et al. (2013). <a href="https://arxiv.org/abs/1310.4546">Distributed Representations of Words and Phrases and their Compositionality.</a></li>
+    <li id="ref-elmo">Peters et al. (2018). <a href="https://aclanthology.org/N18-1202/">Deep Contextualized Word Representations.</a></li>
+    <li id="ref-bert">Devlin et al. (2018 preprint; 2019 proceedings). <a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.</a></li>
+    <li id="ref-cho">Cho et al. (2014). <a href="https://arxiv.org/abs/1406.1078">Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation.</a></li>
+    <li id="ref-bahdanau">Bahdanau et al. (2014 preprint; ICLR 2015). <a href="https://arxiv.org/abs/1409.0473">Neural Machine Translation by Jointly Learning to Align and Translate.</a></li>
+  </ol>
+</section>
+<nav class="article-next" aria-label="Article sequence"><a href="/under-the-hood/"><span class="direction">← The notebook</span><span class="next-title">Browse all topics</span></a><a href="/under-the-hood/articles/attention/"><span class="direction">Next article →</span><span class="next-title">A tiny Llama-style decoder</span></a></nav>
+    </article>
+  </div>
+</main>
+<footer class="footer"><div class="shell">
+  <p>© 2026 Jeonghyeon Kim</p>
+  <div class="footer-links"><a href="/">About</a><a href="/under-the-hood/examples/tiny_llama.py" download>Code</a><a href="#top">Back to top</a></div>
+</div></footer>
+</body></html>

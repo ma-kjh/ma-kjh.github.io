@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word representations · Under the Hood · Jeonghyeon Kim</title>
+<meta name="description" content="From a row in an embedding table to a representation that depends on context.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://ma-kjh.github.io/under-the-hood/topics/representations/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Word representations · Under the Hood">
+<meta property="og:description" content="From a row in an embedding table to a representation that depends on context.">
+<meta property="og:url" content="https://ma-kjh.github.io/under-the-hood/topics/representations/">
+<link rel="icon" href="/under-the-hood/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/under-the-hood/assets/research.css">
+
+<script defer src="/under-the-hood/assets/research.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "headline": "Word representations · Under the Hood", "description": "From a row in an embedding table to a representation that depends on context.", "url": "https://ma-kjh.github.io/under-the-hood/topics/representations/", "author": {"@type": "Person", "name": "Jeonghyeon Kim", "url": "https://ma-kjh.github.io"}, "inLanguage": "en", "dateModified": "2026-10-22"}</script>
+</head><body id="top">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="shell">
+  <a class="brand" href="/">Jeonghyeon Kim</a>
+  <button class="menu-button" data-menu aria-expanded="false" aria-controls="site-nav">Menu</button>
+  <nav class="topnav" id="site-nav" aria-label="Main navigation">
+    <a class="active" href="/under-the-hood/">Under the Hood</a>
+    <a href="/publications">Publications</a>
+    <a href="https://github.com/ma-kjh/ma-kjh.github.io/tree/main/under-the-hood">GitHub</a>
+  </nav>
+</div></header>
+<main id="main" class="shell">
+  <section class="topic-hero"><div class="breadcrumbs"><a href="/under-the-hood/">Under the Hood</a><span>/</span><span>Word representations</span></div>
+    <h1>Word representations</h1><p class="question">How do words become useful vectors?</p><p class="lead">Start with the objects attention operates on. Learn how word vectors are trained, what a static lookup can express, and why sequence models need a way to retrieve relevant context.</p>
+    <p><a href="/under-the-hood/articles/foundations/">Read the full explanation →</a></p>
+  </section>
+  <div class="topic-detail-grid"><div>
+    <section class="section"><div class="section-head"><h2>The article</h2></div>
+      <div class="article-list"><a class="article-row" href="/under-the-hood/articles/foundations/">
+      <span class="row-number">01</span>
+      <div><h3>Before attention: how words become vectors</h3><p>Build an embedding table, calculate a complete skip-gram training step, and discover why a decoder needs more than one fixed vector.</p>
+        <div class="row-meta"><span>14 min read</span><span>Equations and code</span></div>
+      </div><span class="row-end" aria-hidden="true">↗</span>
+    </a></div>
+    </section>
+    <section class="section"><div class="section-head"><h2>Related reading</h2></div>
+      <div class="article-list"><a class="article-row" href="/under-the-hood/articles/attention/">
+      <span class="row-number">02</span>
+      <div><h3>Inside attention, one tensor at a time</h3><p>Follow a complete decoder through Q, K, V, rotary positions, grouped-query attention, residual connections, and next-token logits. Every shape has a job.</p>
+        <div class="row-meta"><span>22 min read</span><span>Equations and code</span></div>
+      </div><span class="row-end" aria-hidden="true">↗</span>
+    </a></div>
+    </section>
+  </div><aside class="topic-aside" aria-label="Topic resources"><h3>What this covers</h3><ul><li>Embedding lookup</li><li>CBOW and skip-gram</li><li>Softmax and negative sampling</li><li>Static vs. contextual states</li><li>The encoder–decoder bottleneck</li></ul><h3>Original papers and sources</h3><ul><li><span class="paper-meta">Bengio et al. · 2003</span><a href="https://jmlr.org/papers/v3/bengio03a.html">A Neural Probabilistic Language Model</a></li><li><span class="paper-meta">Mikolov et al. · 2013</span><a href="https://arxiv.org/abs/1301.3781">Efficient Estimation of Word Representations</a></li><li><span class="paper-meta">Bahdanau et al. · 2014/15</span><a href="https://arxiv.org/abs/1409.0473">Jointly Learning to Align and Translate</a></li></ul>
+    <div class="notebook-note"><p>The core articles share one small NumPy decoder. Its random weights make the computation inspectable.</p><a href="/under-the-hood/examples/tiny_llama.py" download>Download the code</a></div>
+  </aside></div>
+</main>
+<footer class="footer"><div class="shell">
+  <p>© 2026 Jeonghyeon Kim</p>
+  <div class="footer-links"><a href="/">About</a><a href="/under-the-hood/examples/tiny_llama.py" download>Code</a><a href="#top">Back to top</a></div>
+</div></footer>
+</body></html>

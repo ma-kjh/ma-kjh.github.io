@@ -1,0 +1,10 @@
+# Python >=3.10.
+# First install a CUDA-compatible PyTorch wheel using the official selector:
+# https://pytorch.org/get-started/locally/
+# Then install this file. Installing these requirements alone does not prove
+# that a suitable CUDA driver/device is available.
+-r requirements-numpy.txt
+torch>=2.6,<3
+transformers>=4.45,<6
+safetensors>=0.4.5,<1
+sentencepiece>=0.2,<1
