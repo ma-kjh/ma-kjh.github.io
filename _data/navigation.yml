@@ -9,3 +9,5 @@ pages:
   url: /publications
 - name: CV
   url: /assets/cv.pdf
+- name: Under the Hood
+  url: /under-the-hood/
